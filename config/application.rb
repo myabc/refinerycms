@@ -3,7 +3,14 @@ require File.expand_path('../boot', __FILE__)
 # Specified gem version of Refinery to use when vendor/plugins/refinery/lib/refinery.rb is not present.
 REFINERY_GEM_VERSION = '0.9.6.21' unless defined? REFINERY_GEM_VERSION
 
-require 'rails/all'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+# require 'active_resource/railtie'
+require 'rake/testtask' # FIXME: This should not be required here, but is needed
+                        #        to avoid an uninitialized constant error resulting
+                        #        from how dm-rails sets up the load path.
+require 'dm-rails/railtie'
+require 'rails/test_unit/railtie'
 
 # Auto-require default libraries and those for the current Rails environment.
 Bundler.require :default, Rails.env
@@ -11,9 +18,6 @@ Bundler.require :default, Rails.env
 $LOAD_PATH << File.expand_path('../../vendor/engines/refinery/lib', __FILE__)
 require 'refinery'
 require File.expand_path('../../lib/refinery_initializer', __FILE__)
-
-# Hack to get current working version of friendly_id (somewhat) working with Rails 3
-require 'friendly_id/active_record2'
 
 module Refinerycms
   class Application < Rails::Application

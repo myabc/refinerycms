@@ -1,15 +1,24 @@
-class PagePart < ActiveRecord::Base
+class PagePart
+  include DataMapper::Resource
 
-  belongs_to :page
+  property :id,         Serial
+  property :page_id,    Integer
+  property :title,      String
+  property :body,       Text
+  property :position,   Integer
+  property :created_at, DateTime
+  property :updated_at, DateTime
 
-  validates_presence_of :title
+  belongs_to :page, :model => 'Page'
+
+  validates_present :title
   alias_attribute :content, :body
 
   def to_param
     "page_part_#{self.title.downcase.gsub(" ", "_")}"
   end
 
-  before_save :normalise_text_fields
+  before :save, :normalise_text_fields
 
 protected
   def normalise_text_fields

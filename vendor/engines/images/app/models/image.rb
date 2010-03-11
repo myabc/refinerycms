@@ -1,15 +1,29 @@
-class Image < ActiveRecord::Base
+class Image
+  include DataMapper::Resource
+
+  property :id,           Serial
+  property :parent_id,    Integer
+  property :content_type, String
+  property :filename,     String
+  property :thumbnail,    String
+  property :size,         Integer
+  property :width,        Integer
+  property :height,       Integer
+  property :image_type,   String
+  property :created_at,   DateTime
+  property :updated_at,   DateTime
 
   # What is the max image size a user can upload
   MAX_SIZE_IN_MB = 20
 
   # Docs for attachment_fu http://github.com/technoweenie/attachment_fu
-  has_attachment :content_type => :image,
-                 :storage => (Refinery.s3_backend ? :s3 : :file_system),
-                 :path_prefix => (Refinery.s3_backend ? nil : 'public/system/images'),
-                 :processor => 'Rmagick',
-                 :thumbnails => ((((thumbnails = RefinerySetting.find_or_set(:image_thumbnails, {})).is_a?(Hash) ? thumbnails : (RefinerySetting[:image_thumbnails] = {}))) rescue {}),
-                 :max_size => MAX_SIZE_IN_MB.megabytes
+  # FIXME: for DataMapper port
+  #has_attachment :content_type => :image,
+  #               :storage => (Refinery.s3_backend ? :s3 : :file_system),
+  #               :path_prefix => (Refinery.s3_backend ? nil : 'public/system/images'),
+  #               :processor => 'Rmagick',
+  #               :thumbnails => ((((thumbnails = RefinerySetting.find_or_set(:image_thumbnails, {})).is_a?(Hash) ? thumbnails : (RefinerySetting[:image_thumbnails] = {}))) rescue {}),
+  #               :max_size => MAX_SIZE_IN_MB.megabytes
 
   # we could use validates_as_attachment but it produces 4 odd errors like
   # "size is not in list". So we basically here enforce the same validation
@@ -31,11 +45,17 @@ class Image < ActiveRecord::Base
   end
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
-  acts_as_indexed :fields => [:title],
-                  :index_file => [Rails.root.to_s, "tmp", "index"]
+  # FIXME: for DataMapper port
+  # acts_as_indexed :fields => [:title],
+  #                :index_file => [Rails.root.to_s, "tmp", "index"]
 
-  named_scope :thumbnails, :conditions => "parent_id IS NOT NULL"
-  named_scope :originals, :conditions => {:parent_id => nil}
+  def self.thumbnails
+    all(:conditions => "parent_id IS NOT NULL")
+  end
+
+  def self.originals
+    all(:conditions => {:parent_id => nil})
+  end
 
   # when a dialog pops up with images, how many images per page should there be
   PAGES_PER_DIALOG = 18

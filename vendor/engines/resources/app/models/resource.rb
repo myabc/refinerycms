@@ -1,12 +1,22 @@
-class Resource < ActiveRecord::Base
+class Resource
+  include DataMapper::Resource
+
+  property :id,           Serial
+  property :content_type, String
+  property :filename,     String
+  property :size,         Integer
+  property :parent_id,    Integer
+  property :created_at,   DateTime
+  property :updated_at,   DateTime
 
   # What is the max resource size a user can upload
   MAX_SIZE_IN_MB = 50
 
   # Docs for attachment_fu http://github.com/technoweenie/attachment_fu
-  has_attachment :storage => (Refinery.s3_backend ? :s3 : :file_system),
-                 :max_size => MAX_SIZE_IN_MB.megabytes,
-                 :path_prefix => (Refinery.s3_backend ? nil : 'public/system/resources')
+  # FIXME: for DataMapper port
+  #has_attachment :storage => (Refinery.s3_backend ? :s3 : :file_system),
+  #               :max_size => MAX_SIZE_IN_MB.megabytes,
+  #               :path_prefix => (Refinery.s3_backend ? nil : 'public/system/resources')
 
   # we could use validates_as_attachment but it produces 4 odd errors like
   # "size is not in list". So we basically here enforce the same validation
@@ -27,8 +37,9 @@ class Resource < ActiveRecord::Base
   end
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
-  acts_as_indexed :fields => [:title, :type_of_content],
-                  :index_file => [Rails.root.to_s, "tmp", "index"]
+  # FIXME: for DataMapper port
+  #acts_as_indexed :fields => [:title, :type_of_content],
+  #                :index_file => [Rails.root.to_s, "tmp", "index"]
 
   # when a dialog pops up with images, how many images per page should there be
   PAGES_PER_DIALOG = 12

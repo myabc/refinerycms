@@ -1,11 +1,20 @@
-class RefinerySetting < ActiveRecord::Base
+class RefinerySetting
+  include DataMapper::Resource
 
-  validates_presence_of :name
-  validates_uniqueness_of :name
+  property :id,           Serial
+  property :name,         String
+  property :value,        Text
+  property :destroyable,  Boolean, :default => true
+  property :created_at,   DateTime
+  property :updated_at,   DateTime
 
-  serialize :value # stores into YAML format
-  after_save do |object|
-    object.class.cache_write(object.name, object.value)
+  validates_present :name
+  validates_is_unique :name
+
+  # FIXME: for DataMapper port
+  # serialize :value # stores into YAML format
+  after :save do
+    self.class.cache_write(self.name, self.value)
   end
 
   def self.cache_key(name)
@@ -50,7 +59,7 @@ class RefinerySetting < ActiveRecord::Base
     # Try to get the value from cache first.
     unless (value = cache_read(name)).present?
       # Either find the record or create one with the defined value
-      value = find_or_create_by_name(:name => name.to_s, :value => the_value).value
+      value = first_or_create(:name => name.to_s, :value => the_value).value
       # Cache it
       cache_write(name, value)
     end
@@ -63,7 +72,7 @@ class RefinerySetting < ActiveRecord::Base
     # Try to get the value from cache first.
     unless (value = cache_read(name)).present?
       # Not found in cache, try to find the record
-      value = if (setting = self.find_by_name(name.to_s)).present?
+      value = if (setting = self.first(:name => name.to_s)).present?
         # Cache it
         cache_write(name, setting.value)
       else
@@ -77,7 +86,7 @@ class RefinerySetting < ActiveRecord::Base
   end
 
   def self.[]=(name, value)
-    setting = find_or_initialize_by_name(name.to_s)
+    setting = self.first_or_new(:name => name.to_s)
     setting.value = value
     setting.save
   end

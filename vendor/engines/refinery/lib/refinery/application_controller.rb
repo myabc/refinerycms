@@ -8,10 +8,10 @@ class Refinery::ApplicationController < ActionController::Base
 
   before_filter :take_down_for_maintenance?, :find_pages_for_menu, :show_welcome_page
 
-  rescue_from ActiveRecord::RecordNotFound, ActionController::UnknownAction, :with => :error_404
+  rescue_from DataMapper::ObjectNotFoundError, ActionController::UnknownAction, :with => :error_404
 
   def error_404
-    if (@page = Page.find_by_menu_match("^/404$", :include => [:parts, :slugs])).present?
+    if (@page = Page.first(:menu_match => "^/404$")).present?
       # render the application's custom 404 page with layout.
       render :template => "/pages/show", :status => 404
     else
@@ -29,7 +29,7 @@ class Refinery::ApplicationController < ActionController::Base
   end
 
   def just_installed?
-    !User.exists?
+    User.count == 0
   end
 
   def from_dialog?

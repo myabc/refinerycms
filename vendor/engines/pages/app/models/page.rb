@@ -1,20 +1,44 @@
-class Page < ActiveRecord::Base
+require 'page_part'
 
-  validates_presence_of :title
+class Page
+  include DataMapper::Resource
 
-  acts_as_tree :order => "position ASC", :include => [:children, :slugs]
+  property :id,                   Serial
+  property :title,                String
+  property :parent_id,            Integer
+  property :position,             Integer
+  property :path,                 String
+  property :created_at,           DateTime
+  property :updated_at,           DateTime
+  property :meta_keywords,        String
+  property :meta_description,     Text
+  property :show_in_menu,         Boolean,  :default => true
+  property :link_url,             String
+  property :menu_match,           String
+  property :deletable,            Boolean,  :default => true
+  property :custom_title,         String
+  property :custom_title_type,    String,   :default => 'none'
+  property :draft,                Boolean,  :default => false
+  property :browser_title,        String
+  property :skip_to_first_child,  Boolean,  :default => false
+
+  validates_present :title
+
+  is :tree, :order => :position.asc
 
   # Docs for friendly_id http://github.com/norman/friendly_id
-  has_friendly_id :title, :use_slug => true
+  # has_friendly_id :title, :use_slug => true
 
-  has_many :parts, :class_name => "PagePart", :order => "position ASC"
-  accepts_nested_attributes_for :parts, :allow_destroy => true
+  has n, :parts, :model => 'PagePart' #:order => "position ASC"
+  # FIXME: for DataMapper port
+  # accepts_nested_attributes_for :parts, :allow_destroy => true
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
-  acts_as_indexed :fields => [:title, :meta_keywords, :meta_description, :custom_title, :browser_title, :all_page_part_content],
-                  :index_file => [Rails.root.to_s, "tmp", "index"]
+  # FIXME: for DataMapper port
+  #acts_as_indexed :fields => [:title, :meta_keywords, :meta_description, :custom_title, :browser_title, :all_page_part_content],
+  #                :index_file => [Rails.root.to_s, "tmp", "index"]
 
-  before_destroy :deletable?
+  before :destroy, :deletable?
 
   # when a dialog pops up to link to a page, how many pages per page should there be
   PAGES_PER_DIALOG = 14
@@ -118,7 +142,7 @@ class Page < ActiveRecord::Base
     include_associations = [:parts]
     include_associations.push(:slugs) if self.class.methods.include? "find_one_with_friendly"
     include_associations.push(:children) if include_children
-    find_all_by_parent_id(nil,:conditions => {:show_in_menu => true, :draft => false}, :order => "position ASC", :include => include_associations)
+    all(:parent_id => nil, :show_in_menu => true, :draft => false, :order => [ :position.asc ]) # :include => include_associations
   end
 
   # Accessor method to get a page part from a page.

@@ -1,16 +1,33 @@
-class Inquiry < ActiveRecord::Base
+class Inquiry
+  include DataMapper::Resource
 
-  validates_presence_of :name
-  validates_format_of :email,
-                      :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
-                      :message => 'must be valid'
+  property :id,         Serial
+  property :name,       String
+  property :email,      String
+  property :phone,      String
+  property :message,    Text
+  property :position,   Integer
+  property :open,       Boolean,  :default => true
+  property :created_at, DateTime
+  property :updated_at, DateTime
 
-  acts_as_indexed :fields => [:name, :email, :message, :phone],
-                  :index_file => [Rails.root.to_s, "tmp", "index"]
+  validates_present :name
+  validates_format  :email,
+                    :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
+                    :message => 'must be valid'
 
-  default_scope :order => 'created_at DESC'
+  # FIXME: for DataMapper port
+  #acts_as_indexed :fields => [:name, :email, :message, :phone],
+  #                :index_file => [Rails.root.to_s, "tmp", "index"]
 
-  named_scope :closed, :conditions => {:open => false}
-  named_scope :opened, :conditions => {:open => true}
+  default_scope :order => [ :created_at.desc ]
+
+  def self.closed
+    all(:open => false)
+  end
+
+  def self.opened
+    all(:open => true)
+  end
 
 end

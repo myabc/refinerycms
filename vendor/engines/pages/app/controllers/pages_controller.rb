@@ -1,12 +1,12 @@
 class PagesController < ApplicationController
 
   def home
-    @page = Page.find_by_link_url("/", :include => [:parts, :slugs])
+    @page = Page.first(:link_url => "/")
     error_404 unless @page.present?
   end
 
   def show
-    @page = Page.find(params[:id], :include => [:parts, :slugs])
+    @page = Page.get(params[:id])
 
     if @page.live? or (logged_in? and current_user.authorized_plugins.include?("Pages"))
       # if the admin wants this to be a "placeholder" page which goes to its first child, go to that instead.
