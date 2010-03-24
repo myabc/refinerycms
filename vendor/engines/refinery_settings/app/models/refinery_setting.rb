@@ -3,7 +3,7 @@ class RefinerySetting
 
   property :id,           Serial
   property :name,         String
-  property :value,        Text
+  property :value,        Yaml
   property :destroyable,  Boolean, :default => true
   property :created_at,   DateTime
   property :updated_at,   DateTime
@@ -11,8 +11,6 @@ class RefinerySetting
   validates_present :name
   validates_is_unique :name
 
-  # FIXME: for DataMapper port
-  # serialize :value # stores into YAML format
   after :save do
     self.class.cache_write(self.name, self.value)
   end
