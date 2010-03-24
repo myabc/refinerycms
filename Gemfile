@@ -22,6 +22,8 @@ git "git://github.com/datamapper/dm-more.git" do
   gem 'dm-migrations',     '~> 0.10.2'
   gem 'dm-observer',       '~> 0.10.2'
   gem 'dm-serializer',     '~> 0.10.2'
+  gem 'dm-is-tree',        '~> 0.10.2'
+  gem 'dm-sweatshop',      '~> 0.10.2'
 end
 
 git 'git://github.com/datamapper/dm-rails.git'

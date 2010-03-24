@@ -2,7 +2,9 @@ require 'test_helper'
 
 class RefinerySettingTest < ActiveSupport::TestCase
 
-  fixtures :refinery_settings
+  def refinery_settings(fixture_type)
+    RefinerySetting.gen(fixture_type)
+  end
 
   def test_title
     assert_equal "Site Name", refinery_settings(:site_name).title

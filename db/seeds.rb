@@ -14,7 +14,7 @@
     }
   }].each do |setting|
   RefinerySetting[setting[:name].to_sym] = setting[:value]
-  RefinerySetting.find_by_name(setting[:name].to_s).update_attributes({:destroyable => false})
+  RefinerySetting.first(:name => setting[:name].to_s).update_attributes({:destroyable => false})
 end
 
 InquirySetting.create(:name => "Confirmation Body", :value => "Thank you for your inquiry %name%,\n\nThis email is a receipt to confirm we have received your inquiry and we'll be in touch shortly.\n\nThanks.", :destroyable => false)

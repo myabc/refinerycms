@@ -5,7 +5,13 @@ class Admin::DashboardController; def rescue_action(e) raise e end; end
 
 class DashboardControllerTest < ActionController::TestCase
 
-  fixtures :users, :pages
+  def users(fixture_type)
+    User.gen(fixture_type)
+  end
+
+  def pages(fixture_type)
+    Page.gen(fixture_type)
+  end
 
   def setup
     @controller = Admin::DashboardController.new

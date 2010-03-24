@@ -2,7 +2,9 @@ require 'test_helper'
 
 class InquiryTest < ActiveSupport::TestCase
 
-  fixtures :inquiries
+  def inquiries(fixture_type)
+    Inquiry.gen(fixture_type)
+  end
 
   def setup
     @new_inquiry = Inquiry.new

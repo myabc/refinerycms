@@ -2,7 +2,9 @@ require 'test_helper'
 
 class ResourceTest < ActiveSupport::TestCase
 
-  fixtures :resources
+  def resources(fixture_type)
+    Resource.gen(fixture_type)
+  end
 
   def test_titles
     assert_equal "teng.pdf", resources(:pdf_document).filename

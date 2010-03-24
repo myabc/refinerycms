@@ -2,7 +2,9 @@ require 'test_helper'
 
 class ImageTest < ActiveSupport::TestCase
 
-  fixtures :images
+  def images(fixture_type)
+    Image.gen(fixture_type)
+  end
 
   def test_titles
     assert_equal "The%20world!.gif", images(:the_world).filename

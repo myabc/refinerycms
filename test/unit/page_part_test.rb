@@ -2,7 +2,9 @@ require 'test_helper'
 
 class PagePartTest < ActiveSupport::TestCase
 
-  fixtures :page_parts
+  def page_parts(fixture_type)
+    PagePart.gen(fixture_type)
+  end
 
   def setup
     @new_page_part = PagePart.new

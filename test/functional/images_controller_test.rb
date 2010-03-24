@@ -5,7 +5,13 @@ class Admin::ImagesController; def rescue_action(e) raise e end; end
 
 class ImagesControllerTest < ActionController::TestCase
 
-  fixtures :users, :images
+  def users(fixture_type)
+    User.gen(fixture_type)
+  end
+
+  def images(fixture_type)
+    Image.gen(fixture_type)
+  end
 
   def setup
     @controller = Admin::ImagesController.new
