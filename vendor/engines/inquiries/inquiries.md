@@ -22,10 +22,10 @@ Go into your 'Inquiries' tab in the Refinery admin area and click on "Update who
 
 Go into your 'Inquiries' tab in the Refinery admin area and click on "Edit confirmation email"
 
-## But I don't ant a Contact Form how do I kill it?
+## But I don't want a Contact Form how do I kill it?
 
 Your contact form loads because you have a page in your site that is told to not just render a normal page, but load the contact form instead.
 
-By default this page is called "Contact Us". Go to your "Pages" tab in the Refinery admin area and click the edit icon on "Contact Us". Now click on "Hide/Show Advanced Options" and you'll see that a "Custom URL" is set to ``/inquiries/new``. Simply change this to nothing, or delete the contact us page.
+By default this page is called "Contact Us". Go to your "Pages" tab in the Refinery admin area and click the edit icon on "Contact Us". Now click on "Hide/Show Advanced Options" and you'll see that a "Custom URL" is set to ``/contact``. Simply change this to nothing, or delete the contact us page.
 
 You might also want to remove the Inquiries plugin from your backend view. To do that, you go to the "Users" tab in the Refinery admin area, edit your user, uncheck "Inquiries" from the list of plugins you can access.

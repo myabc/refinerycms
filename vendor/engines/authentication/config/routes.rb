@@ -1,15 +1,23 @@
 Rails::Application.routes.draw do
 
-  resources :users
   resource :session
+  resources :users, :only => [:new, :create] do
+    collection do
+      get :forgot
+      get :reset
+    end
+  end
+  match '/users/reset/:reset_code', :to => 'users#reset', :as => 'reset_users'
 
-  namespace(:admin) do
-    resources :users
+  scope(:path => 'refinery', :name_prefix => 'admin', :module => 'admin') do
+    resources :users do
+      collection do
+        post :update_positions
+      end
+    end
   end
 
   match '/login',  :to => 'sessions#new',     :as => 'login'
   match '/logout', :to => 'sessions#destroy', :as => 'logout'
-  match '/forgot', :to => 'users#forgot',     :as => 'forgot'
-  match '/reset/:reset_code', :to => 'users#reset', :as => 'reset'
 
 end

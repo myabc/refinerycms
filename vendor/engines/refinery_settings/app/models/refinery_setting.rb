@@ -29,7 +29,7 @@ class RefinerySetting
 
   # Number of settings to show per page when using will_paginate
   def self.per_page
-    10
+    12
   end
 
   # prettier version of the name.
@@ -54,33 +54,12 @@ class RefinerySetting
   end
 
   def self.find_or_set(name, the_value)
-    # Try to get the value from cache first.
-    unless (value = cache_read(name)).present?
-      # Either find the record or create one with the defined value
-      value = first_or_create(:name => name.to_s, :value => the_value).value
-      # Cache it
-      cache_write(name, value)
-    end
-
-    # Return what we found.
-    value
+    find_or_create_by_name(:name => name.to_s, :value => the_value).value
   end
 
   def self.[](name)
-    # Try to get the value from cache first.
-    unless (value = cache_read(name)).present?
-      # Not found in cache, try to find the record
-      value = if (setting = self.first(:name => name.to_s)).present?
-        # Cache it
-        cache_write(name, setting.value)
-      else
-        # Still cache the nil to prevent more lookups to find nothing.
-        cache_write(name, nil)
-      end
-    end
-
-    # Return what we found.
-    value
+    setting = self.find_by_name(name.to_s)
+    setting.value unless setting.nil?
   end
 
   def self.[]=(name, value)
@@ -97,9 +76,7 @@ class RefinerySetting
   REPLACEMENTS = {"true" => true, "false" => false}
 
   def value
-    current_value = self[:value]
-
-    if current_value.present?
+    if (current_value = self[:value]).present?
       # This bit handles true and false so that true and false are actually returned
       # not "0" and "1"
       REPLACEMENTS.each do |current, new_value|

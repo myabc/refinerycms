@@ -79,8 +79,8 @@ class User
     unless self.new_record? # don't add plugins when the user_id is NULL.
       self.plugins.delete_all
 
-      plugin_titles.each do |plugin_title|
-        self.plugins.find_or_create_by_title(plugin_title) if plugin_title.is_a?(String)
+      plugin_titles.each_with_index do |plugin_title, index|
+        self.plugins.create(:title => plugin_title, :position => index) if plugin_title.is_a?(String)
       end
     end
   end
@@ -91,19 +91,6 @@ class User
 
   def can_delete?(other_user = self)
     !other_user.superuser and User.count > 1 and (other_user.nil? or self.id != other_user.id)
-  end
-
-protected
-
-  # before filter
-  def encrypt_password
-    return if password.blank?
-    self.password_salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
-    self.crypted_password = encrypt(password)
-  end
-
-  def password_required?
-    crypted_password.blank? || !password.blank?
   end
 
 end

@@ -35,7 +35,7 @@ class RefinerySettingTest < ActiveSupport::TestCase
   end
 
   def test_per_page
-    assert_equal 10, RefinerySetting.per_page
+    assert_equal 12, RefinerySetting.per_page
   end
 
   def test_boolean_settings

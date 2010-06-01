@@ -1,5 +1,5 @@
 Rails::Application.routes.draw do
-  namespace(:admin) do
-    resources :dashboard
+  scope(:path => 'refinery', :name_prefix => 'admin', :module => 'admin') do
+    resources :dashboard, :controller => 'dashboard'
   end
 end

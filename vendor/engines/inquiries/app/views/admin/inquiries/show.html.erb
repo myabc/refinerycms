@@ -1,13 +1,16 @@
 <div id='actions'>
   <h2>Details</h2>
   <p>
-    <strong>Status:</strong> <%= @inquiry.open? ? "Open" : "Closed" %><br/>
     <strong>Age:</strong> <%= time_ago_in_words(@inquiry.created_at) %>
   </p>
   <h2>Actions</h2>
   <ul>
     <li>
       <%= link_to "Back to all Inquiries", {:action => 'index'}, :class => "back_icon" %>
+    </li>
+    <li>
+      <%= link_to "Remove this inquiry forever", admin_inquiry_url(@inquiry), :class => 'delete_icon no-tooltip confirm-delete',
+                                                                              :title => "Remove this inquiry forever" %>
     </li>
   </ul>
 </div>

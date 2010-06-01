@@ -1,7 +1,5 @@
 require File.expand_path('../boot', __FILE__)
 
-# Specified gem version of Refinery to use when vendor/plugins/refinery/lib/refinery.rb is not present.
-REFINERY_GEM_VERSION = '0.9.6.21' unless defined? REFINERY_GEM_VERSION
 
 require 'action_controller/railtie'
 require 'action_mailer/railtie'

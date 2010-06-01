@@ -1,19 +1,26 @@
 class Admin::PagesController < Admin::BaseController
 
-  crudify :page, :conditions => "parent_id IS NULL", :order => "position ASC", :include => [:parts, :slugs, :children], :paging => false
+  crudify :page,
+          :conditions => "parent_id IS NULL",
+          :order => "position ASC",
+          :include => [:parts, :slugs, :children],
+          :paging => false
+
   before_filter :find_pages_for_parents_list, :only => [:new, :create, :edit, :update]
   after_filter :expire_menu_fragment_caching, :only => [:create, :update, :destroy, :update_positions]
 
+  rescue_from FriendlyId::ReservedError, :with => :show_errors_for_reserved_slug
+
   def new
     @page = Page.new
-    RefinerySetting.find_or_set(:default_page_parts, ["Body", "Side Body"]).each do |page_part|
-      @page.parts << PagePart.new(:title => page_part)
+    RefinerySetting.find_or_set(:default_page_parts, ["Body", "Side Body"]).each_with_index do |page_part, index|
+      @page.parts << PagePart.new(:title => page_part, :position => index)
     end
   end
 
 protected
   def expire_menu_fragment_caching
-    expire_fragment(%r{site_menu})
+    expire_fragment(%r{#{RefinerySetting.find_or_set(:refinery_menu_cache_action_suffix, "site_menu")}})
   end
 
   # This finds all of the pages that could possibly be assigned as the current page's parent.
@@ -36,9 +43,20 @@ protected
     list = []
     page.children.each do |child|
       list << child
-      list += add_pages_branch_to_parents_list if child.children.any?
+      list += add_pages_branch_to_parents_list(child) if child.children.any?
     end
     list
+  end
+
+  def show_errors_for_reserved_slug(exception)
+    flash[:error] = "Sorry, but that title is a reserved system word."
+    if params[:action] == 'update'
+      find_page
+      render :edit
+    else
+      @page = Page.new(params[:page])
+      render :new
+    end
   end
 
 end

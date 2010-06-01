@@ -22,12 +22,8 @@ class Inquiry
 
   default_scope :order => [ :created_at.desc ]
 
-  def self.closed
-    all(:open => false)
-  end
-
-  def self.opened
-    all(:open => true)
+  def self.latest(number=7)
+    all(:limit => number)
   end
 
 end

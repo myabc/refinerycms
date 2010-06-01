@@ -1,4 +1,4 @@
-source 'http://gemcutter.org'
+source :rubygems
 
 git 'git://github.com/rails/rails.git'
 
@@ -30,16 +30,32 @@ git 'git://github.com/datamapper/dm-rails.git'
 
 gem 'dm-rails', '~> 0.10.2'
 
-# Use mongrel as the web server
-gem 'mongrel', :group => :development
+# Specify your favourite web server (only one).
+gem 'unicorn', :group => :development
+#gem 'mongrel', :group => :development
 
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'hpricot', '0.6'
-# gem 'aws-s3', :require => 'aws/s3'
+# If you are using s3 you probably want this gem:
+# gem 'aws-s3'
+
+#===REFINERY REQUIRED GEMS===
+git 'git://github.com/rails/rails.git'
+git 'git://github.com/stephencelis/authlogic.git'
+
+gem 'rails',          '3.0.0.beta3'
+gem 'rmagick',        '~> 2.13.1'
+gem 'hpricot',        '~> 0.8'
+gem 'authlogic',      '~> 2.1.3'
+gem 'friendly_id',    '~> 3.0'
+gem 'will_paginate',  '3.0.pre'
+#===REFINERY END OF REQUIRED GEMS===
+
+#===REQUIRED FOR REFINERY GEM INSTALL===
+# Leave the gem below disabled (commented out) if you're not using the gem install method.
+#gem 'refinerycms',    '= 0.9.7.dev'
+#===END OF REFINERY GEM INSTALL REQUIREMENTS===
 
 # Bundle gems for certain environments:
 group :test do
@@ -48,17 +64,7 @@ group :test do
   gem 'cucumber-rails'
 end
 
-#===REFINERY REQUIRED GEMS===
-# git 'git://github.com/norman/friendly_id.git', :branch => 'rails3'
-# gem "friendly_id", ">= 3.0.0", :require => 'friendly_id'
-gem "hpricot", ">= 0.8.1", :require => "hpricot"
-#git 'git://github.com/mislav/will_paginate.git', 'branch' => 'rails3'
-gem "will_paginate", "3.0.pre"
-gem "rake", ">= 0.8.3", :require => "rake"
-git 'git://github.com/stephencelis/authlogic.git'
-gem "authlogic", "~> 2.1.3"
-#===REFINERY END OF REQUIRED GEMS===
-
-# Specify your application's gem requirements here. See the example below:
+# Specify your application's gem requirements here. See the examples below:
 # gem "refinerycms-news", "~> 0.9.7", :require => "news"
 # gem "refinerycms-portfolio", "~> 0.9.3.8", :require => "portfolio"
+
