@@ -2,8 +2,7 @@ class <%= class_name %>
   include DataMapper::Resource
 
   # FIXME: for DataMapper port
-  #acts_as_indexed :fields => [:<%= attributes.collect{ |attribute| attribute.name if attribute.type.to_s =~ /string|text/ }.compact.uniq.join(", :") %>],
-  #                :index_file => [Rails.root.to_s, "tmp", "index"]
+  #acts_as_indexed :fields => [:<%= attributes.collect{ |attribute| attribute.name if attribute.type.to_s =~ /string|text/ }.compact.uniq.join(", :") %>]
 
   validates_present :<%= attributes.first.name %>
   validates_is_unique :<%= attributes.first.name %>

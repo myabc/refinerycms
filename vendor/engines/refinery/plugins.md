@@ -38,7 +38,7 @@ A new database migration has been added to add the products table in so run:
 
 Start up your app by running ``ruby script/server`` go to [http://localhost:3000](http://localhost:3000) and you'll see instantly a new menu item called "products". Click on that and you'll see there are no products yet.
 
-Now go to the backend of your site by visiting [http://localhost:3000/admin](http://localhost:3000/admin) and logging in. You'll see a new tab called "Products", click on that and then click "Add a new product", fill the form and add an example product. Now go back to the front end and you'll see your product is showing up in the products part of your site.
+Now go to the backend of your site by visiting [http://localhost:3000/refinery](http://localhost:3000/refinery) and logging in. You'll see a new tab called "Products", click on that and then click "Add a new product", fill the form and add an example product. Now go back to the front end and you'll see your product is showing up in the products part of your site.
 
 Now you have a fully managed products section in Refinery, nice.
 
@@ -151,7 +151,7 @@ Here's what the different activity options mean:
     :url_prefix
     # Just use "_edit" if you're not sure how this works.
     #
-    # When it says "'About Us' page was updated about 4 hours ago", the page title "About Us"
+    # When it says "'About' page was updated about 4 hours ago", the page title "About"
     # is linked to that page in a way we specify.  So by setting "_edit" as a :url_prefix what
     # we're doing is making it link to the page that allows us to edit this page.
     # So the next result is edit_admin_page_url(page)
@@ -190,7 +190,7 @@ Refinery uses a standards compliant visual editor called [WYMeditor](http://www.
 
 _Note: When using the Refinery generator, if you apply a field type of "text" to any of your fields, they automatically load as a WYMEditor._
 
-The WYSIWYG editor can only be applied to a ``textarea``. All you need to do is add a class of "wymeditor" to a ``textarea`` in your form and a WYSIWYG WYMEditor will load right in place.
+The WYSIWYG editor can only be applied to a ``textarea``. All you need to do is add a class of "wymeditor widest" to a ``textarea`` in your form and a WYSIWYG WYMEditor will load right in place.
 
 ### Example
 
@@ -200,6 +200,6 @@ Again going back to our product plugin example if you had this in your ``vendor/
 
 Just change that to:
 
-    <%= f.text_area :description, :class => "wymeditor" %>
+    <%= f.text_area :description, :class => "wymeditor widest" %>
 
 Refresh and you're done.

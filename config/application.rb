@@ -48,6 +48,14 @@ module Refinerycms
     #   g.test_framework  :test_unit, :fixture => true
     # end
 
+    config.middleware.insert_after 'Rack::Lock', 'Dragonfly::Middleware', :images
+    config.middleware.insert_after 'Rack::Lock', 'Dragonfly::Middleware', :resources
+    config.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
+      :verbose     => true,
+      :metastore   => "file:#{Rails.root}/tmp/dragonfly/cache/meta",
+      :entitystore => "file:#{Rails.root}/tmp/dragonfly/cache/body"
+    }
+
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :password_confirmation]
   end
@@ -56,3 +64,8 @@ end
 # You can set things in the following file and we'll try hard not to destroy them in updates, promise.
 # Note: These are settings that aren't dependent on environment type. For those, use the files in config/environments/
 require Rails.root.join('config', 'settings.rb').to_s
+
+# Bundler has shown a weakness using Rails < 3 so we are going to
+# require these dependencies here until we can find another solution or until we move to
+# Rails 3.0 which should fix the issue (or until Bundler fixes the issue).
+require_dependency 'will_paginate'

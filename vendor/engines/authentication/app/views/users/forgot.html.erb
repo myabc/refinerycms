@@ -1,14 +1,18 @@
-<%= form_for(:user) do |f| -%>
+<% content_for :header, t('.enter_email_address') %>
+
+<%= form_for :user do |f| -%>
   <%= f.error_messages %>
-  <p>Enter the email address for your account.</p>
+
   <div class='field'>
-    <%= f.label :email %>
-    <%= f.text_field :email, :class => "larger" %>
+    <%= f.text_field :email, :class => "larger widest",
+                     :placeholder => t('.email_address', :default => t('authlogic.attributes.user_session.email')) %>
   </div>
-  <div class='form-actions'>
-    <%= submit_tag 'Reset password' %>
-    or
-    <%= link_to "Cancel", login_url %>
-  </div>
+
+  <%= render :partial => "/shared/admin/form_actions",
+             :locals => {
+               :f => f,
+               :continue_editing => false,
+               :submit_button_text => t('.reset_password'),
+               :cancel_url => login_url
+             } -%>
 <% end -%>
-<% content_for :header, "Please enter the email address for your account." %>

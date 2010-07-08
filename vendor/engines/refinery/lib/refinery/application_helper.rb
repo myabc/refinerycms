@@ -1,7 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module Refinery::ApplicationHelper
 
-  include Refinery::HtmlTruncationHelper rescue puts "#{__FILE__}:#{__LINE__} Could not load hpricot"
+  include Refinery::HtmlTruncationHelper
 
   # This is used to display the title of the current object (normally a page) in the browser's titlebar.
   #
@@ -20,9 +20,19 @@ module Refinery::ApplicationHelper
       parts = match.split(".")
       extension = parts.pop
       content.gsub!(match, "#{parts.join(".")}_#{thumbnail}.#{extension}")
-    end
+    end unless content.blank?
 
     return content
+  end
+
+  # This was extracted from REFINERY_ROOT/vendor/plugins/refinery/app/views/shared/_menu_branch.html.erb
+  # to remove the complexity of that template by reducing logic in the view.
+  def css_for_menu_branch(menu_branch, menu_branch_counter)
+    css = []
+    css << "selected" if selected_page?(menu_branch) or descendant_page_selected?(menu_branch)
+    css << "first" if menu_branch_counter == 0
+    css << "last" if menu_branch_counter == (sibling_count ||= menu_branch.shown_siblings.size)
+    css
   end
 
   # Determines whether any page underneath the supplied page is the current page according to rails.
@@ -37,17 +47,19 @@ module Refinery::ApplicationHelper
   # <%= image_fu @model.image, :preview %> or with no thumbnail: <%= image_fu @model.image %>
   def image_fu(image, thumbnail = nil , options={})
     if image.present?
-      # if a thumbnail name was specified then find the thumbnail belonging to this image with that name, if existant.
-      image_thumbnail = image.thumbnails.detect {|t| t.thumbnail == thumbnail.to_s} unless thumbnail.nil?
-
-      # default back to using the image specified as the "thumbnail" if we didn't find one.
-      image_thumbnail = image unless image_thumbnail.present?
+      thumbnail_sizes = RefinerySetting.find_or_set(:image_thumbnails, {})
+      if (size = thumbnail_sizes[thumbnail])
+        image_thumbnail_url = image.url(size)
+      else
+        # default back to using the image specified as the "thumbnail" if we didn't find one.
+        image_thumbnail_url = image.url
+      end
 
       # call rails' image tag function with default alt, width and height options.
       # if any other options were supplied these are merged in and can replace the defaults.
-      image_tag(image_thumbnail.public_filename, {:alt => image.respond_to?(:title) ? image.title : image.filename,
-                                                  :width => image_thumbnail.width,
-                                                  :height => image_thumbnail.height
+      image_tag(image_thumbnail_url, {:alt => image.respond_to?(:title) ? image.title : image.image_name,
+                                                  #:width => image_thumbnail.width,
+                                                  #:height => image_thumbnail.height
                                                  }.merge(options))
     end
   end
@@ -58,7 +70,7 @@ module Refinery::ApplicationHelper
   # Use <%= jquery_include_tags %> to include it in your <head> section.
   def jquery_include_tags(options={})
     # Merge in options
-    options = { :caching => RefinerySetting.find_or_set(:use_resource_caching, true),
+    options = { :caching => RefinerySetting.find_or_set(:use_resource_caching, Rails.root.join('public', 'javascripts', 'cache').writable?),
                 :google => RefinerySetting.find_or_set(:use_google_ajax_libraries, false),
                 :jquery_ui => true
               }.merge(options)
@@ -66,9 +78,10 @@ module Refinery::ApplicationHelper
     # render the tags normally unless
     unless options[:google] and !local_request?
       if options[:jquery_ui]
-        javascript_include_tag 'jquery', 'jquery-ui', :cache => (options[:caching] ? "cache/libraries" : nil)
+        javascript_include_tag  "jquery#{"-min" if Rails.env.production?}", "jquery-ui-custom-min",
+                                :cache => (options[:caching] ? "cache/jquery" : nil)
       else
-        javascript_include_tag 'jquery'
+        javascript_include_tag "jquery#{"-min" if Rails.env.production?}"
       end
     else
       "#{javascript_include_tag("http://www.google.com/jsapi").gsub(".js", "")}
@@ -129,6 +142,12 @@ module Refinery::ApplicationHelper
     end
   end
 
+  # Returns <span class='help' title='Your Input'>(help)</span>
+  # Remember to wrap your block with <span class='label_with_help'></span> if you're using a label next to the help tag.
+  def refinery_help_tag(title='')
+    "<span class='help' title='#{title}'>(help)</span>"
+  end
+
   # This is just a quick wrapper to render an image tag that lives inside refinery/icons.
   # They are all 16x16 so this is the default but is able to be overriden with supplied options.
   def refinery_icon_tag(filename, options = {})
@@ -137,15 +156,38 @@ module Refinery::ApplicationHelper
 
   # Determine whether the supplied page is the currently open page according to Rails.
   def selected_page?(page)
+    # ensure we match the path without the locale.
+    path = request.path
+    path = path.split("/#{I18n.locale}").last if ::Refinery::I18n.enabled?
+
     current_page?(page) or
-      (request.path =~ Regexp.new(page.menu_match) if page.menu_match.present?) or
-      (request.path == page.link_url) or
-      (request.path == page.nested_path)
+      (path =~ Regexp.new(page.menu_match) if page.menu_match.present?) or
+      (path == page.link_url) or
+      (path == page.nested_path)
   end
 
   # Old deprecated function. TODO: Remove
   def setup
     logger.warn("*** Refinery::ApplicationHelper::setup has now been deprecated from the Refinery API. ***")
+  end
+
+  # Generates the link to determine where the site bar switch button returns to.
+  def site_bar_switch_link
+    link_to_if(admin?, t('.switch_to_your_website'),
+              (if session.keys.include?(:website_return_to) and session[:website_return_to].present?
+                session[:website_return_to]
+               else
+                root_url(:only_path => true)
+               end)) do
+      link_to t('.switch_to_your_website_editor'),
+              (if session.keys.include?(:refinery_return_to) and session[:refinery_return_to].present?
+                session[:refinery_return_to]
+               elsif defined?(@page) and @page.present? and !@page.home?
+                 edit_admin_page_url(@page, :only_path => true)
+               else
+                 (request.request_uri.to_s == '/') ? admin_root_url(:only_path => true) : "/admin#{request.request_uri}/edit"
+               end rescue admin_root_url(:only_path => true))
+    end
   end
 
 end

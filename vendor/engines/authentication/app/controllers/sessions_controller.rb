@@ -10,8 +10,8 @@ class SessionsController < ApplicationController
 
   def create
     if (@session = UserSession.create(params[:session])).valid?
+      flash[:notice] = t('sessions.login_successful') if refinery_user?
       redirect_back_or_default(admin_root_url)
-      flash[:notice] = "Logged in successfully"
     else
       render :action => 'new'
     end
@@ -19,14 +19,18 @@ class SessionsController < ApplicationController
 
   def destroy
     current_user_session.destroy if logged_in?
-    flash[:notice] = "You have been logged out."
-    redirect_back_or_default(root_url)
+
+    redirect_to(root_url)
   end
 
 protected
 
   def redirect?
-    redirect_to admin_root_url if logged_in?
+    if refinery_user?
+      redirect_to admin_root_url
+    elsif logged_in?
+      redirect_to root_url
+    end
   end
 
   def redirect_to_new

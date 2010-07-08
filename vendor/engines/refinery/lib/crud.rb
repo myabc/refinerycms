@@ -18,6 +18,10 @@ module Crud
   module ClassMethods
 
     def crudify(model_name, new_options = {})
+      singular_name = model_name.to_s
+      class_name = singular_name.camelize
+      plural_name = singular_name.pluralize
+
       options = {
         :title_attribute => "title",
         :order => 'position ASC',
@@ -26,12 +30,9 @@ module Crud
         :searchable => true,
         :include => [],
         :paging => true,
-        :search_conditions => ''
+        :search_conditions => '',
+        :redirect_to_url => "admin_#{plural_name}_url"
       }.merge!(new_options)
-
-      singular_name = model_name.to_s
-      class_name = singular_name.camelize
-      plural_name = singular_name.pluralize
 
       module_eval %(
         before_filter :find_#{singular_name}, :only => [:update, :destroy, :edit, :show]
@@ -48,13 +49,13 @@ module Crud
 
           if (@#{singular_name} = #{class_name}.create(params[:#{singular_name}])).valid?
             unless request.xhr?
-              flash[:notice] = "'\#{@#{singular_name}.#{options[:title_attribute]}}' was successfully created."
+              flash[:notice] = t('refinery.crudify.created', :what => "'\#{@#{singular_name}.#{options[:title_attribute]}}'")
             else
-              flash.now[:notice] = "'\#{@#{singular_name}.#{options[:title_attribute]}}' was successfully created."
+              flash.now[:notice] = t('refinery.crudify.created', :what => "'\#{@#{singular_name}.#{options[:title_attribute]}}'")
             end
             unless from_dialog?
               unless params[:continue_editing] =~ /true|on|1/
-                redirect_to admin_#{plural_name}_url
+                redirect_back_or_default(#{options[:redirect_to_url]})
               else
                 unless request.xhr?
                   redirect_to :back
@@ -63,7 +64,7 @@ module Crud
                 end
               end
             else
-              render :text => "<script type='text/javascript'>parent.window.location = '\#{admin_#{plural_name}_url}';</script>"
+              render :text => "<script type='text/javascript'>parent.window.location = '\#{#{options[:redirect_to_url]}}';</script>"
             end
           else
             unless request.xhr?
@@ -81,13 +82,13 @@ module Crud
         def update
           if @#{singular_name}.update_attributes(params[:#{singular_name}])
             unless request.xhr?
-              flash[:notice] = "'\#{@#{singular_name}.#{options[:title_attribute]}}' was successfully updated."
+              flash[:notice] = t('refinery.crudify.updated', :what => "'\#{@#{singular_name}.#{options[:title_attribute]}}'")
             else
-              flash.now[:notice] = "'\#{@#{singular_name}.#{options[:title_attribute]}}' was successfully updated."
+              flash.now[:notice] = t('refinery.crudify.updated', :what => "'\#{@#{singular_name}.#{options[:title_attribute]}}'")
             end
             unless from_dialog?
               unless params[:continue_editing] =~ /true|on|1/
-                redirect_to admin_#{plural_name}_url
+                redirect_back_or_default(#{options[:redirect_to_url]})
               else
                 unless request.xhr?
                   redirect_to :back
@@ -96,7 +97,7 @@ module Crud
                 end
               end
             else
-              render :text => "<script type='text/javascript'>parent.window.location = '\#{admin_#{plural_name}_url}';</script>"
+              render :text => "<script type='text/javascript'>parent.window.location = '\#{#{options[:redirect_to_url]}}';</script>"
             end
           else
             unless request.xhr?
@@ -108,8 +109,8 @@ module Crud
         end
 
         def destroy
-          flash[:notice] = "'\#{@#{singular_name}.#{options[:title_attribute]}}' was successfully deleted." if @#{singular_name}.destroy
-          redirect_to admin_#{plural_name}_url
+          flash.now[:notice] = t('refinery.crudify.destroyed', :what => "'\#{@#{singular_name}.#{options[:title_attribute]}}'") if @#{singular_name}.destroy
+          redirect_to #{options[:redirect_to_url]}
         end
 
         def find_#{singular_name}

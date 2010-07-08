@@ -12,40 +12,25 @@ class Resource
   # What is the max resource size a user can upload
   MAX_SIZE_IN_MB = 50
 
-  # Docs for attachment_fu http://github.com/technoweenie/attachment_fu
   # FIXME: for DataMapper port
-  #has_attachment :storage => (Refinery.s3_backend ? :s3 : :file_system),
-  #               :max_size => MAX_SIZE_IN_MB.megabytes,
-  #               :path_prefix => (Refinery.s3_backend ? nil : 'public/system/resources')
+  #resource_accessor :file
 
-  # we could use validates_as_attachment but it produces 4 odd errors like
-  # "size is not in list". So we basically here enforce the same validation
-  # rules here except display the error messages we want
-  # This is a known problem when using attachment_fu
-  def validate
-    if self.filename.nil?
-      errors.add_to_base("You must choose a file to upload")
-    else
-      [:size].each do |attr_name|
-        enum = attachment_options[attr_name]
-
-        unless enum.nil? || enum.include?(send(attr_name))
-          errors.add_to_base("Files should be smaller than #{MAX_SIZE_IN_MB} MB in size") if attr_name == :size
-        end
-      end
-    end
-  end
+  validates_presence_of :file, :message => I18n.translate('must_choose_file')
+  validates_size_of     :file, :maximum => MAX_SIZE_IN_MB.megabytes,
+                        :message => I18n.translate('file_should_be_smaller_than_max_file_size',
+                                    :max_file_size => ActionController::Base.helpers.number_to_human_size(MAX_SIZE_IN_MB) )
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   # FIXME: for DataMapper port
-  #acts_as_indexed :fields => [:title, :type_of_content],
-  #                :index_file => [Rails.root.to_s, "tmp", "index"]
+  #acts_as_indexed :fields => [:title, :type_of_content]
 
   # when a dialog pops up with images, how many images per page should there be
   PAGES_PER_DIALOG = 12
 
   # when listing images out in the admin area, how many images should show per page
   PAGES_PER_ADMIN_INDEX = 20
+
+  delegate :ext, :size, :mime_type, :url, :to => :file
 
   # How many images per page should be displayed?
   def self.per_page(dialog = false)
@@ -54,13 +39,13 @@ class Resource
 
   # used for searching
   def type_of_content
-    self.content_type.split("/").join(" ")
+    self.mime_type.split("/").join(" ")
   end
 
   # Returns a titleized version of the filename
   # my_file.pdf returns My File
   def title
-    CGI::unescape(self.filename).gsub(/\.\w+$/, '').titleize
+    CGI::unescape(self.file_name).gsub(/\.\w+$/, '').titleize
   end
 
 end

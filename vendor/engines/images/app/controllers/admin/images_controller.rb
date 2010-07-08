@@ -2,28 +2,21 @@ class Admin::ImagesController < Admin::BaseController
 
   include Admin::ImagesHelper
 
-  crudify :image, :order => "created_at DESC", :conditions => "parent_id is NULL", :sortable => false
+  crudify :image, :order => "created_at DESC", :sortable => false
   before_filter :change_list_mode_if_specified, :init_dialog
 
   def index
     if searching?
       @images = Image.paginate_search params[:search],
                                                :page => params[:page],
-                                               :order => "created_at DESC",
-                                               :conditions => "parent_id IS NULL"
+                                               :order => "created_at DESC"
     else
       @images = Image.paginate :page => params[:page],
-                                               :order => "created_at DESC",
-                                               :conditions => "parent_id IS NULL"
+                                               :order => "created_at DESC"
     end
 
     if RefinerySetting.find_or_set(:group_images_by_date_uploaded, true)
-      @grouped_images = []
-      @images.each do |image|
-        key = image.created_at.strftime("%Y-%m-%d")
-        image_group = @grouped_images.collect{|images| images.last if images.first == key }.flatten.compact << image
-        (@grouped_images.delete_if {|i| i.first == key}) << [key, image_group]
-      end
+      @grouped_images = group_by_date(@images)
     end
   end
 
@@ -57,7 +50,7 @@ class Admin::ImagesController < Admin::BaseController
 
     unless params[:insert]
       if @image.valid?
-        flash[:notice] = "'#{@image.title}' was successfully created."
+        flash[:notice] = t('refinery.crudify.created', :what => "'#{@image.title}'")
         unless from_dialog?
           redirect_to :action => 'index'
         else
@@ -89,10 +82,9 @@ protected
 
   def paginate_images(conditions={})
     @images = Image.paginate   :page => (@paginate_page_number ||= params[:page]),
-                               :conditions => {:parent_id => nil}.merge!(conditions),
+                               :conditions => conditions,
                                :order => 'created_at DESC',
-                               :per_page => Image.per_page(from_dialog?),
-                               :include => :thumbnails
+                               :per_page => Image.per_page(from_dialog?)
   end
 
   def store_current_location!

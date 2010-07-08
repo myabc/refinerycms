@@ -20,7 +20,7 @@ Unlike other content managers, Refinery is truly aimed at the end user making it
 ### For developers
 
 * Allows you to get a small business site completed __ridiculously quickly__
-* Easily __[Theme and customise](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/themes/themes.md)__ the look to suit the business
+* Easily __[Theme and customise](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/themes/readme.md)__ the look to suit the business
 * __[Extend with custom plugins](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/refinery/plugins.md)__ to do anything Refinery doesn't do out of the box
 * Sticks to __"the Rails way"__ as much as possible. We don't force you to learn new templating languages.
 * Uses [jQuery](http://jquery.com/) for fast and concise JavaScript
@@ -29,11 +29,12 @@ Unlike other content managers, Refinery is truly aimed at the end user making it
 
 Refinery's gem requirements are:
 
+* [acts_as_indexed = 0.6.2](http://github.com/parndt/acts_as_indexed)
 * [authlogic ~> 2.1.4](http://rubygems.org/gems/authlogic)
 * [friendly_id ~> 3.0.4](http://rubygems.org/gems/friendly_id)
-* [hpricot ~> 0.8](http://rubygems.org/gems/hpricot)
 * [rails ~> 2.3.6](http://rubygems.org/gems/rails)
 * [rmagick ~> 2.12.2](http://rubygems.org/gems/rmagick)
+* [truncate_html = 0.3.2](http://rubygems.org/gems/truncate_html)
 * [will_paginate ~> 2.3.12](http://rubygems.org/gems/will_paginate)
 
 ### Other dependencies
@@ -108,6 +109,7 @@ You will be prompted to setup your first user.
 
 ## Help and Developer Documentation
 
+* [Tutorial Site](http://resolve.github.com/refinerycms)
 * [Google Group Discussion](http://groups.google.com/group/refinery-cms)
 * [Developer/API documentation](http://api.refinerycms.org)
 * [GitHub repository](http://github.com/resolve/refinerycms)
@@ -143,42 +145,43 @@ This will pull in all of the updated files in the project and may result in some
 
 ## What comes included with Refinery
 
-### [Pages](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/pages/pages.md)
+### [Pages](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/pages/readme.md)
 
 * Easily edit and manage pages with a [WYSIWYG visual editor](http://www.wymeditor.org/)
 * Manage you site's structure
 
-### [Images](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/images/images.md) & [Files](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/resources/resources.md)
+### [Images](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/images/readme.md) & [Files](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/resources/readme.md)
 
 * Easily upload and insert images
 * Upload and link to resources such as PDF documents
 * Uses the popular [attachment_fu](http://github.com/technoweenie/attachment_fu) Rails plugin
 
-### [Inquiries](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/inquiries/inquiries.md)
+### [Inquiries](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/inquiries/readme.md)
 
 * Collect inquiries from a contact form
 * Manage your inquiries and be notified when new ones come in
+* Checks new inquiries for spam
 
 ### [News](http://github.com/resolve/refinerycms-news)
 
 * Post news about your company and update your visitors
 
-### [Settings](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/refinery_settings/settings.md)
+### [Settings](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/refinery_settings/readme.md)
 
 * Manage the behaviour of Refinery
 * Easily integrate with [Google Analytics](https://www.google.com/analytics/)
 
-### [Dashboard](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/dashboard/dashboard.md)
+### [Dashboard](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/dashboard/readme.md)
 
 * Get an overview of what has been updated recently
 
-### [Authentication & Users](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/authentication/authentication.md)
+### [Authentication & Users](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/authentication/readme.md)
 
 * Manage who can access Refinery
 * Control which plugins each user has access to
 * Uses the popular [authlogic](http://github.com/binarylogic/authlogic) authentication Rails plugin
 
-### [Themes](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/themes/themes.md)
+### [Themes](http://github.com/resolve/refinerycms/blob/master/vendor/plugins/themes/readme.md)
 
 * Customise Refinery to look exactly how you want
 * The Rails Way: use regular Rails erb views, no templating languages here!
@@ -203,6 +206,6 @@ Check out the [portfolio plugin gem](http://github.com/resolve/refinerycms-portf
 
 ## License
 
-Refinery is released under the MIT license and is copyright (c) 2005-2009 [Resolve Digital Ltd.](http://www.resolvedigital.co.nz)
+Refinery is released under the MIT license and is copyright (c) 2005-2010 [Resolve Digital Ltd.](http://www.resolvedigital.co.nz)
 
 [Read the license](http://github.com/resolve/refinerycms/blob/master/license.md)

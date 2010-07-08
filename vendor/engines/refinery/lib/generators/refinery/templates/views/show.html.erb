@@ -9,7 +9,7 @@
 <% if attribute.type.to_s == 'image' -%>
     <%%= image_fu @<%= singular_name %>.<%= attribute.name %>, nil %>
 <% elsif attribute.type.to_s == 'resource' -%>
-    <%%= link_to <%= "'#{attribute.name}'" %>, @<%= singular_name %>.<%= attribute.name %>.public_filename %>
+    <%%= link_to <%= "'#{attribute.name}'" %>, @<%= singular_name %>.<%= attribute.name %>.url %>
 <% else -%>
     <%%= @<%= singular_name %>.<%= attribute.name %> %>
 <% end -%>
@@ -18,7 +18,7 @@
 <%% end %>
 
 <%% content_for :body_content_right do %>
-  <h2>Other <%= $title_name.pluralize %></h2>
+  <h2><%%= t('.other') %></h2>
   <ul id="<%= plural_name %>">
     <%% @<%= plural_name %>.each do |<%= singular_name %>| %>
       <li>

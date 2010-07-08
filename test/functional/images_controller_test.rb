@@ -15,6 +15,7 @@ class ImagesControllerTest < ActionController::TestCase
 
   def setup
     @controller = Admin::ImagesController.new
+    users(:quentin).add_role(:refinery)
     login_as(:quentin)
   end
 
@@ -29,14 +30,6 @@ class ImagesControllerTest < ActionController::TestCase
     get :new
     assert_not_nil assigns(:image)
     assert_not_nil assigns(:url_override)
-  end
-
-  def test_search
-    get :index, :search => "Car"
-
-    assert_equal 1, assigns(:images).size
-    assert images(:the_world), assigns(:images).first
-    assert_not_nil assigns(:images)
   end
 
   def test_should_require_login_and_redirect

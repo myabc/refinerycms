@@ -6,7 +6,8 @@ class Refinery::ApplicationController < ActionController::Base
   include Crud # basic create, read, update and delete methods
   include AuthenticatedSystem
 
-  before_filter :find_pages_for_menu, :show_welcome_page?, :store_current_location!
+  before_filter :find_or_set_locale, :find_pages_for_menu, :show_welcome_page?
+  after_filter :store_current_location!, :if => Proc.new {|c| c.send(:refinery_user?) }
 
   rescue_from DataMapper::ObjectNotFoundError, ActionController::UnknownAction, ActionView::MissingTemplate, :with => :error_404
 
@@ -44,7 +45,7 @@ class Refinery::ApplicationController < ActionController::Base
   end
 
   def just_installed?
-    User.count == 0
+    Role[:refinery].users.empty?
   end
 
   def local_request?
@@ -52,18 +53,21 @@ class Refinery::ApplicationController < ActionController::Base
   end
 
   def login?
-    controller_name =~ /^(user|session)(|s)/ and not admin?
-  end
-
-  def wymiframe
-    render :template => "/wymiframe", :layout => false
+    (controller_name =~ /^(user|session)(|s)/ and not admin?) or just_installed?
   end
 
 protected
 
+  def default_url_options(options={})
+    ::Refinery::I18n.enabled? ? { :locale => I18n.locale } : {}
+  end
+
   # get all the pages to be displayed in the site menu.
   def find_pages_for_menu
-    @menu_pages = Page.top_level(include_children=true)
+    if (@menu_pages = Rails.cache.read(cache_key = "#{Refinery.base_cache_key}_menu_pages")).nil?
+      @menu_pages = Page.top_level(include_children = true)
+      Rails.cache.write(cache_key, @menu_pages) if @menu_pages.present?
+    end
   end
 
   # use a different model for the meta information.
@@ -78,9 +82,23 @@ protected
     super
   end
 
+  def find_or_set_locale
+    if ::Refinery::I18n.enabled?
+      if ::Refinery::I18n.has_locale?(locale = params[:locale].try(:to_sym))
+        ::I18n.locale = locale
+      elsif locale.present? and locale != ::Refinery::I18n.default_frontend_locale
+        params[:locale] = I18n.locale = ::Refinery::I18n.default_frontend_locale
+        redirect_to(params, :notice => "The locale '#{locale.to_s}' is not supported.") and return
+      else
+        ::I18n.locale = ::Refinery::I18n.default_frontend_locale
+      end
+    end
+  end
+
   def show_welcome_page?
     render :template => "/welcome", :layout => "admin" if just_installed? and controller_name != "users"
   end
+
   # todo: make this break in the next major version rather than aliasing.
   alias_method :show_welcome_page, :show_welcome_page?
 
@@ -92,9 +110,9 @@ private
   def store_current_location!
     if admin?
       # ensure that we don't redirect to AJAX or POST/PUT/DELETE urls
-      session[:refinery_return_to] = request.path if request.get? and !request.xhr?
-    elsif request.path !~ /^(\/(wym(\-.*|iframe)|system\/|sessions?|.*\/dialogs))/ and !from_dialog? and controller_name !~ /^(sessions|users)/
-      session[:website_return_to] = request.path
+      session[:refinery_return_to] = request.path if request.get? and !request.xhr? and !from_dialog?
+    elsif defined?(@page) and @page.present?
+      session[:website_return_to] = @page.url
     end
   end
 

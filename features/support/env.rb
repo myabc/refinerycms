@@ -56,3 +56,8 @@ if defined?(ActiveRecord::Base)
   rescue LoadError => ignore_if_database_cleaner_not_present
   end
 end
+
+require 'authlogic/test_case'
+Before do
+  activate_authlogic
+end
