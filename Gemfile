@@ -13,13 +13,13 @@ RSPEC_VERSION = '~> 2.0.0.beta.15'
 # gem 'dm-sqlserver-adapter', DM_VERSION
 
 # Specify your favourite web server (only one) - not required.
-# gem 'unicorn', :group => :development
-# gem 'mongrel', :group => :development
+#gem 'unicorn', :group => :development
+#gem 'mongrel', :group => :development
 
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# If you are using Amazon S3 you probably want this gem:
+# If you are using s3 you probably want this gem:
 # gem 'aws-s3'
 
 #===REFINERY REQUIRED GEMS===
@@ -41,7 +41,7 @@ gem 'dm-observer',      DM_VERSION
 gem 'rmagick',        '~> 2.12.2', :require => 'RMagick'
 gem 'rack-cache',     :require => 'rack/cache'
 gem 'dragonfly',                  :git => 'git://github.com/myabc/dragonfly.git',        :branch => '1.9.2-fixes'
-gem 'acts_as_indexed', '= 0.6.2', :git => 'git://github.com/parndt/acts_as_indexed.git', :branch => 'rails3'
+gem 'acts_as_indexed', '= 0.6.3'
 gem 'authlogic',      '~> 2.1.5'
 gem 'friendly_id',    '~> 3.0'
 gem 'truncate_html',   '= 0.3.2', :require => 'truncate_html'
@@ -56,6 +56,7 @@ group :test do
   gem 'rspec-rails',        RSPEC_VERSION
   gem 'factory_girl'
   gem 'test-unit', '= 1.2.3'
+
   gem 'cucumber-rails'
   gem 'capybara'
   gem 'factory_girl'
@@ -66,11 +67,11 @@ end
 
 #===REQUIRED FOR REFINERY GEM INSTALL===
 # Leave the gem below disabled (commented out) if you're not using the gem install method.
-# gem 'refinerycms',    '= 0.9.7.3'
+#gem 'refinerycms',    '= 0.9.7.5'
 #===END OF REFINERY GEM INSTALL REQUIREMENTS===
 
 # Bundle gems for certain environments:
 
 # Specify your application's gem requirements here. See the examples below:
-# gem "refinerycms-news", "~> 0.9.7.3", :require => "news"
-# gem "refinerycms-portfolio", "~> 0.9.6", :require => "portfolio"
+# gem "refinerycms-news", "~> 0.9.7", :require => "news"
+# gem "refinerycms-portfolio", "~> 0.9.3.8", :require => "portfolio"
