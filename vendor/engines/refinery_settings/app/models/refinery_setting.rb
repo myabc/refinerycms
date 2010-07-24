@@ -8,7 +8,7 @@ class RefinerySetting
   property :created_at,   DateTime
   property :updated_at,   DateTime
   property :scoping,      String
-  property :restricted,   Boolean
+  property :restricted,   Boolean, :default => false
   property :callback_proc_as_string, String
 
   validates_presence_of :name

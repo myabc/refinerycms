@@ -10,6 +10,7 @@ class Inquiry
   property :open,       Boolean,  :default => true
   property :created_at, DateTime
   property :updated_at, DateTime
+  property :spam,       Boolean,  :default => false
 
   validates_presence_of :name, :message
   validates_format_of :email,
