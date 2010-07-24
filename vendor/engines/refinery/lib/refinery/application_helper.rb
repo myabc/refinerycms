@@ -38,7 +38,7 @@ module Refinery::ApplicationHelper
   # Determines whether any page underneath the supplied page is the current page according to rails.
   # Just calls selected_page? for each descendant of the supplied page.
   def descendant_page_selected?(page)
-    page.descendants.any? {|descendant| selected_page?(descendant) }
+    #page.descendants.any? {|descendant| selected_page?(descendant) }
   end
 
   # image_fu is a helper for inserting an image that has been uploaded into a template.

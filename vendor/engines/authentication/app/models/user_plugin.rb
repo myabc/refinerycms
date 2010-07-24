@@ -3,7 +3,7 @@ class UserPlugin
 
   property :id,       Serial
   property :user_id,  Integer
-  property :title,    String
+  property :name,     String
   property :position, Integer
 
   belongs_to :user

@@ -33,7 +33,7 @@ class User
   validates_is_unique   :login, :email, :case_sensitive => false
   before :save, :encrypt_password
 
-  has n, :plugins, :model => "UserPlugin", :order => "position ASC"
+  has n, :plugins, :model => "UserPlugin", :order => [:position.asc]
 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.

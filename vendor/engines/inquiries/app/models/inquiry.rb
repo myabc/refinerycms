@@ -21,15 +21,15 @@ class Inquiry
   default_scope :order => [ :created_at.desc ]
 
   def self.newest
-    all(:order => 'created_at DESC')
+    all(:order => [:created_at.desc])
   end
 
   def self.ham
-    all({:conditions => {:spam => false}, :order => 'created_at DESC'})
+    all({:conditions => {:spam => false}, :order => [:created_at.desc]})
   end
 
   def self.spam
-    {:conditions => {:spam => true}, :order => 'created_at DESC'}
+    {:conditions => {:spam => true}, :order => [:created_at.desc]}
   end
 
   # FIXME: for DataMapper port
@@ -47,7 +47,7 @@ class Inquiry
   }
 
   def self.latest(number = 7)
-    newest.all(limit => number)
+    newest.all(:limit => number)
   end
 
   def ham?

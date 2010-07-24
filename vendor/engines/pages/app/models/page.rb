@@ -159,7 +159,7 @@ class Page
   end
 
   def cache_key
-    "#{Refinery.base_cache_key}/#{super}"
+    "#{Refinery.base_cache_key}/#{to_param}"
   end
 
   def use_marketable_urls?
