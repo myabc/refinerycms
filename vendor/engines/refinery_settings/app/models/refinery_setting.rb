@@ -7,9 +7,12 @@ class RefinerySetting
   property :destroyable,  Boolean, :default => true
   property :created_at,   DateTime
   property :updated_at,   DateTime
+  property :scoping,      String
+  property :restricted,   Boolean
+  property :callback_proc_as_string, String
 
-  validates_present :name
-  validates_is_unique :name
+  validates_presence_of :name
+  validates_uniqueness_of :name
 
   # FIXME: DM Porting
   # serialize :callback_proc_as_string
@@ -48,6 +51,7 @@ class RefinerySetting
   # Access method that allows dot notation to work.
   # Say you had a setting called "site_name". You could access that by going RefinerySetting[:site_name]
   # but with this you can also access that by going RefinerySettting.site_name
+=begin
   def self.method_missing(method, *args)
     method_name = method.to_s
     super(method, *args)
@@ -59,6 +63,7 @@ class RefinerySetting
       self[method_name]
     end
   end
+=end
 
   def self.find_or_set(name, the_value, options={})
     # Try to get the value from cache first.
@@ -66,11 +71,11 @@ class RefinerySetting
     restricted = options[:restricted]
     callback_proc_as_string = options[:callback_proc_as_string]
     if (value = cache_read(name, scoping)).nil?
-      setting = find_or_create_by_name(:name => name.to_s, :value => the_value)
+      setting = first_or_create(:name => name.to_s, :value => the_value)
 
       # if the database is not up to date yet then it won't know about certain fields.
-      setting.scoping = scoping if self.column_names.include?('scoping')
-      setting.restricted = restricted if self.column_names.include?('restricted')
+      setting.scoping = scoping #if self.column_names.include?('scoping')
+      setting.restricted = restricted #if self.column_names.include?('restricted')
       setting.callback_proc_as_string = callback_proc_as_string if callback_proc_as_string.is_a?(String) && self.column_names.include?('callback_proc_as_string')
 
       setting.save

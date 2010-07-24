@@ -20,12 +20,20 @@ class Inquiry
 
   default_scope :order => [ :created_at.desc ]
 
-  scope :newest, :order => 'created_at DESC'
+  def self.newest
+    all(:order => 'created_at DESC')
+  end
 
-  scope :ham, lambda {{:conditions => {:spam => false}, :order => 'created_at DESC'}}
-  scope :spam, lambda {{:conditions => {:spam => true}, :order => 'created_at DESC'}}
+  def self.ham
+    all({:conditions => {:spam => false}, :order => 'created_at DESC'})
+  end
 
-  before_validation(:on => :create) { calculate_spam_score }
+  def self.spam
+    {:conditions => {:spam => true}, :order => 'created_at DESC'}
+  end
+
+  # FIXME: for DataMapper port
+  #before_validation(:on => :create) { calculate_spam_score }
 
   cattr_accessor :spam_words
   self.spam_words = %w{
@@ -39,7 +47,7 @@ class Inquiry
   }
 
   def self.latest(number = 7)
-    newest.find(:all, :limit => number)
+    newest.all(limit => number)
   end
 
   def ham?

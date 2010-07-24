@@ -1,1 +1,1 @@
-require "friendly_id/active_record"
+#require "friendly_id/active_record"

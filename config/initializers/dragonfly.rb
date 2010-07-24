@@ -1,3 +1,4 @@
+=begin
 require 'dragonfly'
 
 app1 = Dragonfly::App[:images]
@@ -19,3 +20,4 @@ end
 
 Dragonfly.active_record_macro(:image,    app1)
 Dragonfly.active_record_macro(:resource, app2)
+=end

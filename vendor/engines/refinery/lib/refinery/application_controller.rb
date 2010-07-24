@@ -6,7 +6,7 @@ class Refinery::ApplicationController < ActionController::Base
   include Crud # basic create, read, update and delete methods
   include AuthenticatedSystem
 
-  before_filter :find_or_set_locale, :find_pages_for_menu, :show_welcome_page?
+  before_filter :find_or_set_locale, :find_pages_for_menu #, :show_welcome_page?
   after_filter :store_current_location!, :if => Proc.new {|c| c.send(:refinery_user?) }
 
   rescue_from DataMapper::ObjectNotFoundError, ActionController::UnknownAction, ActionView::MissingTemplate, :with => :error_404

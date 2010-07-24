@@ -9,6 +9,7 @@ module Refinery
     end
 
     initializer 'themes.configuration' do |app|
+=begin
       ::Refinery::ApplicationController.module_eval do
 
         # Add or remove theme paths to/from Refinery application
@@ -32,14 +33,15 @@ module Refinery
           end
 
           # Set up menu caching for this theme or lack thereof
-          if RefinerySetting.table_exists? and
-              RefinerySetting[:refinery_menu_cache_action_suffix] != (suffix = "#{"#{theme}_" if theme.present?}site_menu")
+          #if RefinerySetting.table_exists? and
+          if    RefinerySetting[:refinery_menu_cache_action_suffix] != (suffix = "#{"#{theme}_" if theme.present?}site_menu")
             RefinerySetting[:refinery_menu_cache_action_suffix] = suffix
           end
         end
         protected :attach_theme_to_refinery
 
       end
+=end
     end
 
     initializer 'themes.helper' do |app|

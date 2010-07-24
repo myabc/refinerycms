@@ -118,6 +118,7 @@ class Refinery::I18n
   end
 end
 
+=begin
 if RefinerySetting.table_exists?
   # override translate, but only in production
   ::I18n.module_eval do
@@ -139,3 +140,4 @@ if RefinerySetting.table_exists?
 
   ::Refinery::I18n.setup!
 end
+=end

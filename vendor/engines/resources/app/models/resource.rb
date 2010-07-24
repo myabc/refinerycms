@@ -16,9 +16,10 @@ class Resource
   #resource_accessor :file
 
   validates_presence_of :file, :message => I18n.translate('must_choose_file')
-  validates_size_of     :file, :maximum => MAX_SIZE_IN_MB.megabytes,
-                        :message => I18n.translate('file_should_be_smaller_than_max_file_size',
-                                    :max_file_size => ActionController::Base.helpers.number_to_human_size(MAX_SIZE_IN_MB) )
+  # FIXME: for DataMapper port
+  # validates_size_of     :file, :maximum => MAX_SIZE_IN_MB.megabytes,
+  #                      :message => I18n.translate('file_should_be_smaller_than_max_file_size',
+  #                                  :max_file_size => ActionController::Base.helpers.number_to_human_size(MAX_SIZE_IN_MB) )
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   # FIXME: for DataMapper port

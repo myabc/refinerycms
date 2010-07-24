@@ -193,14 +193,7 @@ class Page
     include_associations = [:parts]
     include_associations.push(:slugs) if self.class.methods.include? "find_one_with_friendly"
     include_associations.push(:children) if include_children
-<<<<<<< HEAD
     all(:parent_id => nil, :show_in_menu => true, :draft => false, :order => [ :position.asc ]) # :include => include_associations
-=======
-    find_all_by_parent_id(nil,
-                          :conditions => {:show_in_menu => true, :draft => false},
-                          :order => "position ASC",
-                          :include => include_associations)
->>>>>>> rails3
   end
 
   # Accessor method to get a page part from a page.
