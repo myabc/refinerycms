@@ -1,12 +1,14 @@
 module AuthenticatedSystem
   protected
+
+=begin
     def current_user_session
       @current_user_session ||= UserSession.find
     end
 
     # Returns true or false if the user is logged in.
     # Preloads @current_user with the user model if they're logged in.
-    def logged_in?
+    def user_signed_in?
       !!current_user
     end
 
@@ -31,6 +33,7 @@ module AuthenticatedSystem
         return false
       end
     end
+=end
 
     # Check if the user is authorized
     #
@@ -45,7 +48,7 @@ module AuthenticatedSystem
     #    current_user.login != "bob"
     #  end
     def authorized?
-      logged_in?
+      user_signed_in?
     end
 
     # Filter method to enforce a login requirement.
@@ -119,11 +122,11 @@ module AuthenticatedSystem
     end
 
     def refinery_user?
-      logged_in? && current_user.has_role?(:refinery)
+      user_signed_in? && current_user.has_role?(:refinery)
     end
 
     def self.included(base)
-      base.send :helper_method, :current_user, :current_user_session, :logged_in?, :refinery_user? if base.respond_to? :helper_method
+      base.send :helper_method, :current_user, :current_user_session, :user_signed_in?, :refinery_user? if base.respond_to? :helper_method
     end
 
 end

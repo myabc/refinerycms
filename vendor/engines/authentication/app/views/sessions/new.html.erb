@@ -1,4 +1,4 @@
-<%= form_for(@session, :as => :session, :url => session_path) do |f| -%>
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| -%>
   <%= f.error_messages %>
   <div class='field session_username clearfix'>
     <%= f.label Refinery.authentication_login_field %>
@@ -14,7 +14,7 @@
       <%= f.label :remember_me %>
     </div>
     <div class='field forgot_password'>
-      <%= link_to t('.forgot_password'), forgot_users_url %>
+      <%= link_to t('.forgot_password'), new_user_password_url %>
     </div>
   </div>
   <%= render :partial => "/shared/admin/form_actions", :locals => {:f => f, :submit_button_text => t('.sign_in'), :hide_cancel => true} %>

@@ -23,13 +23,13 @@ gem 'dm-sqlite-adapter',    DM_VERSION
 # gem 'aws-s3'
 
 #===REFINERY REQUIRED GEMS===
-#git 'git://github.com/rails/rails.git'
+git 'git://github.com/rails/rails.git'
 
 gem 'activesupport',    RAILS_VERSION, :require => 'active_support'
 gem 'actionmailer',     RAILS_VERSION, :require => 'action_mailer'
 gem 'actionpack',       RAILS_VERSION, :require => 'action_pack'
 gem 'railties',         RAILS_VERSION, :require => 'rails'
-gem 'dm-rails',         DM_VERSION#, :git => 'git://github.com/datamapper/dm-rails'
+gem 'dm-rails',         DM_VERSION, :git => 'git://github.com/datamapper/dm-rails'
 gem 'dm-migrations',    DM_VERSION
 gem 'dm-types',         DM_VERSION
 gem 'dm-validations',   DM_VERSION
@@ -40,11 +40,12 @@ gem 'dm-timestamps',    DM_VERSION
 gem 'dm-observer',      DM_VERSION
 gem 'dm-is-tree',       DM_VERSION
 gem 'dm-ar-finders',    DM_VERSION
+gem 'devise',           '~> 1.1.0', :git => 'git://github.com/plataformatec/devise'
+gem 'dm-devise',        '~> 0.1.0', :git => 'git://github.com/jm81/dm-devise'
 gem 'rmagick',        '~> 2.12.2', :require => 'RMagick'
 gem 'rack-cache',     :require => 'rack/cache'
 #gem 'dragonfly',                  :git => 'git://github.com/myabc/dragonfly.git',        :branch => '1.9.2-fixes'
 #gem 'acts_as_indexed', '= 0.6.3'
-gem 'authlogic',      '~> 2.1.5'
 #gem 'friendly_id',    '~> 3.0'
 gem 'truncate_html',   '= 0.3.2', :require => 'truncate_html'
 gem 'will_paginate',  '3.0.pre',:git => "git://github.com/mislav/will_paginate.git", :branch => 'rails3'

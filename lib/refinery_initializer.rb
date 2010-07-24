@@ -26,6 +26,7 @@ end
 # We also need the other refinery initializer.
 # require 'refinery/initializer'
 require 'authentication'
+require 'authenticated_system' # TODO: this should not be required here
 require 'dashboard'
 require 'images'
 require 'inquiries'

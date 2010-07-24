@@ -1,6 +1,7 @@
-class SessionsController < ApplicationController
+class SessionsController < Devise::SessionsController
   layout 'admin'
 
+=begin
   before_filter :redirect?, :only => [:new, :create]
   before_filter :redirect_to_new, :only => [:index, :show]
 
@@ -18,7 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    current_user_session.destroy if logged_in?
+    #current_user_session.destroy if user_signed_in?
 
     redirect_to(root_url)
   end
@@ -28,7 +29,7 @@ protected
   def redirect?
     if refinery_user?
       redirect_to admin_root_url
-    elsif logged_in?
+    elsif user_signed_in?
       redirect_to root_url
     end
   end
@@ -36,5 +37,6 @@ protected
   def redirect_to_new
     redirect_to :action => "new"
   end
+=end
 
 end

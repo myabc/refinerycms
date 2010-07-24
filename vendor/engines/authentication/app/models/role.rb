@@ -1,8 +1,12 @@
-class Role < ActiveRecord::Base
+class Role
+  include DataMapper::Resource
 
-  has_and_belongs_to_many :users
+  property :id,    Serial
+  property :title, String
 
-  before_validation :camelize_title
+  has n, :users, :through => Resource
+
+  # TODO: Fixme DM before_validation :camelize_title
   validates_uniqueness_of :title
 
   def camelize_title(role_title = self.title)
@@ -10,7 +14,7 @@ class Role < ActiveRecord::Base
   end
 
   def self.[](title)
-    find_or_create_by_title(title.to_s.camelize)
+    first_or_create(:title => title.to_s.camelize)
   end
 
 end

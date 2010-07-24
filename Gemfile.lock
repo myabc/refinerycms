@@ -1,5 +1,5 @@
 --- 
-hash: 08b11473fac97d1b0f0c4223f332d947d4062518
+hash: 6634f8ed7295f7871a09b0ce2abc351d5843ad6c
 sources: 
 - Git: 
     git: git://github.com/mislav/will_paginate.git
@@ -8,8 +8,23 @@ sources:
     version: 3.0.pre
     uri: git://github.com/mislav/will_paginate.git
     ref: 60aa1c7b2ef03ee7c7a5ed657efb479a69f7d128
+- Git: 
+    git: git://github.com/jm81/dm-devise
+    uri: git://github.com/jm81/dm-devise
+    ref: 476b88c4e42808a60140a90e97d327d1e9c09d52
+- Git: 
+    git: git://github.com/plataformatec/devise
+    uri: git://github.com/plataformatec/devise
+    ref: 81620fecab95183fde3e9652a4a083c0967c4428
+- Git: 
+    git: git://github.com/datamapper/dm-rails
+    uri: git://github.com/datamapper/dm-rails
+    ref: e2ee76073af0a7ac3aadcf97e41297ed233527d8
 - Rubygems: 
     uri: http://gemcutter.org
+- Git: 
+    uri: git://github.com/rails/rails.git
+    ref: 834bd23a07a84ff631da1ded37c643a3a371cb9a
 specs: 
 - rake: 
     version: 0.8.7
@@ -17,16 +32,18 @@ specs:
     version: 1.0.0
 - activesupport: 
     version: 3.0.0.beta4
+    source: 5
 - builder: 
     version: 2.1.2
 - i18n: 
     version: 0.4.1
 - activemodel: 
     version: 3.0.0.beta4
+    source: 5
 - erubis: 
     version: 2.6.6
 - rack: 
-    version: 1.1.0
+    version: 1.2.1
 - rack-mount: 
     version: 0.6.9
 - rack-test: 
@@ -35,6 +52,7 @@ specs:
     version: 0.3.22
 - actionpack: 
     version: 3.0.0.beta4
+    source: 5
 - mime-types: 
     version: "1.16"
 - polyglot: 
@@ -45,10 +63,11 @@ specs:
     version: 2.2.5
 - actionmailer: 
     version: 3.0.0.beta4
+    source: 5
 - addressable: 
     version: 2.1.2
-- authlogic: 
-    version: 2.1.5
+- bcrypt-ruby: 
+    version: 2.1.2
 - culerity: 
     version: 0.2.10
 - nokogiri: 
@@ -81,6 +100,11 @@ specs:
     version: 0.10.2
 - database_cleaner: 
     version: 0.5.2
+- warden: 
+    version: 0.10.7
+- devise: 
+    version: 1.1.0
+    source: 2
 - extlib: 
     version: 0.9.15
 - dm-core: 
@@ -95,35 +119,42 @@ specs:
     version: 1.0.0
 - dm-constraints: 
     version: 1.0.0
+- thor: 
+    version: 0.13.8
+- railties: 
+    version: 3.0.0.beta4
+    source: 5
+- dm-rails: 
+    version: 1.0.0
+    source: 3
+- fastercsv: 
+    version: 1.5.3
+- dm-serializer: 
+    version: 1.0.0
+- dm-timestamps: 
+    version: 1.0.0
+- dm-validations: 
+    version: 1.0.0
+- dm-devise: 
+    version: 0.1.0
+    source: 1
 - dm-do-adapter: 
     version: 1.0.0
 - dm-is-tree: 
     version: 1.0.0
 - dm-observer: 
     version: 1.0.0
-- thor: 
-    version: 0.13.8
-- railties: 
-    version: 3.0.0.beta4
-- dm-rails: 
-    version: 1.0.0
 - do_sqlite3: 
     version: 0.10.2
 - dm-sqlite-adapter: 
     version: 1.0.0
-- dm-timestamps: 
-    version: 1.0.0
 - dm-transactions: 
     version: 1.0.0
-- fastercsv: 
-    version: 1.5.3
 - stringex: 
     version: 1.1.0
 - uuidtools: 
     version: 2.1.1
 - dm-types: 
-    version: 1.0.0
-- dm-validations: 
     version: 1.0.0
 - factory_girl: 
     version: 1.3.1
@@ -229,6 +260,14 @@ dependencies:
     version: ~> 1.0.0
     group: 
     - :default
+  devise: 
+    version: ~> 1.1.0
+    group: 
+    - :default
+  dm-devise: 
+    version: ~> 0.1.0
+    group: 
+    - :default
   rmagick: 
     version: ~> 2.12.2
     group: 
@@ -241,10 +280,6 @@ dependencies:
     - :default
     require: 
     - rack/cache
-  authlogic: 
-    version: ~> 2.1.5
-    group: 
-    - :default
   truncate_html: 
     version: = 0.3.2
     group: 

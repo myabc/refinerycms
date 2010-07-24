@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   caches_action :home, :show,
                 :cache_path => Proc.new { |c| "#{c.request.host_with_port}/views/pages/#{c.params[:path]}" },
                 :if => Proc.new { |c|
-                  c.send(:logged_in?) == false and
+                  c.send(:user_signed_in?) == false and
                   (!RefinerySetting.table_exists? ||
                     RefinerySetting.find_or_set(:page_caching_enabled, true, :scoping => 'pages'))
                 }
@@ -30,7 +30,7 @@ class PagesController < ApplicationController
       Page.find(params[:id], :include => [:parts, :slugs])
     end
 
-    if @page.try(:live?) or (logged_in? and current_user.authorized_plugins.include?("Pages"))
+    if @page.try(:live?) or (user_signed_in? and current_user.authorized_plugins.include?("Pages"))
       # if the admin wants this to be a "placeholder" page which goes to its first child, go to that instead.
       if @page.skip_to_first_child
         first_live_child = @page.children.find_by_draft(false, :order => "position ASC")

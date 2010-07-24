@@ -2,7 +2,7 @@ class Refinery::AdminBaseController < ApplicationController
 
   layout proc { |controller| "admin#{"_dialog" if controller.from_dialog?}" }
 
-  before_filter :redirect_if_old_url, :correct_accept_header, :login_required, :restrict_plugins, :restrict_controller
+  before_filter :redirect_if_old_url, :correct_accept_header, :authenticate_user!, :restrict_plugins, :restrict_controller
   after_filter :store_location?, :except => [:new, :create, :edit, :update, :destroy, :update_positions] # for redirect_back_or_default
 
   helper_method :searching?
