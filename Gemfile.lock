@@ -1,5 +1,5 @@
 --- 
-hash: 6634f8ed7295f7871a09b0ce2abc351d5843ad6c
+hash: 965af2cfd1e17894b1f330ec619f595736ee297f
 sources: 
 - Git: 
     git: git://github.com/mislav/will_paginate.git
@@ -24,7 +24,7 @@ sources:
     uri: http://gemcutter.org
 - Git: 
     uri: git://github.com/rails/rails.git
-    ref: 834bd23a07a84ff631da1ded37c643a3a371cb9a
+    ref: 749948a264ded0aebd77ead087be15d8d5a51ea0
 specs: 
 - rake: 
     version: 0.8.7
@@ -180,6 +180,10 @@ specs:
     version: 0.7.1
 - rspec-rails: 
     version: 2.0.0.beta.18
+- ruby-prof: 
+    version: 0.8.2
+- spork: 
+    version: 0.8.4
 - test-unit: 
     version: 1.2.3
 - truncate_html: 
@@ -269,11 +273,9 @@ dependencies:
     group: 
     - :default
   rmagick: 
-    version: ~> 2.12.2
+    version: ~> 2.12.0
     group: 
     - :default
-    require: 
-    - RMagick
   rack-cache: 
     version: ">= 0"
     group: 
@@ -291,7 +293,7 @@ dependencies:
     group: 
     - :default
   rspec: 
-    version: ~> 2.0.0.beta.15
+    version: ">= 0"
     group: 
     - :test
   rspec-core: 
@@ -313,19 +315,11 @@ dependencies:
     require: 
     - rspec/mocks
   rspec-rails: 
-    version: ~> 2.0.0.beta.15
-    group: 
-    - :test
-  factory_girl: 
     version: ">= 0"
     group: 
     - :test
   test-unit: 
     version: = 1.2.3
-    group: 
-    - :test
-  cucumber-rails: 
-    version: ">= 0"
     group: 
     - :test
   capybara: 
@@ -336,7 +330,31 @@ dependencies:
     version: ">= 0"
     group: 
     - :test
+  cucumber-rails: 
+    version: ">= 0"
+    group: 
+    - :test
+  cucumber: 
+    version: ">= 0"
+    group: 
+    - :test
+  spork: 
+    version: ">= 0"
+    group: 
+    - :test
   launchy: 
+    version: ">= 0"
+    group: 
+    - :test
+  gherkin: 
+    version: ">= 0"
+    group: 
+    - :test
+  factory_girl: 
+    version: ">= 0"
+    group: 
+    - :test
+  ruby-prof: 
     version: ">= 0"
     group: 
     - :test

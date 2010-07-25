@@ -42,7 +42,7 @@ gem 'dm-is-tree',       DM_VERSION
 gem 'dm-ar-finders',    DM_VERSION
 gem 'devise',           '~> 1.1.0', :git => 'git://github.com/plataformatec/devise'
 gem 'dm-devise',        '~> 0.1.0', :git => 'git://github.com/jm81/dm-devise'
-gem 'rmagick',        '~> 2.12.2', :require => 'RMagick'
+gem 'rmagick',        '~> 2.12.0'
 gem 'rack-cache',     :require => 'rack/cache'
 #gem 'dragonfly',                  :git => 'git://github.com/myabc/dragonfly.git',        :branch => '1.9.2-fixes'
 #gem 'acts_as_indexed', '= 0.6.3'
@@ -57,24 +57,28 @@ group :test do
   gem 'rspec-expectations', RSPEC_VERSION, :require => 'rspec/expectations'
   gem 'rspec-mocks',        RSPEC_VERSION, :require => 'rspec/mocks'
   gem 'rspec-rails',        RSPEC_VERSION
-  gem 'factory_girl'
-  gem 'test-unit', '= 1.2.3'
-
-  gem 'cucumber-rails'
+  gem 'test-unit',      '= 1.2.3'
   gem 'capybara'
-  gem 'factory_girl'
   gem 'database_cleaner'
+  gem 'cucumber-rails'
+  gem 'cucumber'
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'spork' unless RUBY_PLATFORM =~ /mswin|mingw/
   gem 'launchy'
+  gem 'gherkin'
+  gem 'factory_girl'
+  gem 'ruby-prof'
 end
 #===REFINERY END OF REQUIRED GEMS===
 
 #===REQUIRED FOR REFINERY GEM INSTALL===
 # Leave the gem below disabled (commented out) if you're not using the gem install method.
-#gem 'refinerycms',    '= 0.9.7.5'
+# gem 'refinerycms',    '= 0.9.7.8'
 #===END OF REFINERY GEM INSTALL REQUIREMENTS===
 
 # Bundle gems for certain environments:
 
 # Specify your application's gem requirements here. See the examples below:
-# gem "refinerycms-news", "~> 0.9.7", :require => "news"
-# gem "refinerycms-portfolio", "~> 0.9.3.8", :require => "portfolio"
+# gem 'refinerycms-news', '~> 0.9.8', :require => 'news'
+# gem 'refinerycms-portfolio', '~> 0.9.7', :require => 'portfolio'

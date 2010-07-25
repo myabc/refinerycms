@@ -22,6 +22,8 @@ class RefinerySetting
     12
   end
 
+  before :save, :check_restriction
+
   after :save do
     #if self.class.column_names.include?('scoping')
     #  self.class.cache_write(setting.name, setting.scoping.presence, setting.value)
@@ -112,6 +114,7 @@ class RefinerySetting
     end
 
     setting.save
+    cache_write(setting.name, setting.scoping, setting.value)
   end
 
   # Below is not very nice, but seems to be required
@@ -149,6 +152,12 @@ class RefinerySetting
 
   def callback_proc
     eval "Proc.new{#{self.callback_proc_as_string} }" if RefinerySetting.column_names.include?('callback_proc_as_string') && self.callback_proc_as_string.present?
+  end
+
+  private
+
+  def check_restriction
+    self.restricted = false if restricted.nil?
   end
 
 end

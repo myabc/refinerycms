@@ -23,7 +23,7 @@ class Resource
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   # FIXME: for DataMapper port
-  #acts_as_indexed :fields => [:title, :type_of_content]
+  #acts_as_indexed :fields => [:file_name, :title, :type_of_content]
 
   # when a dialog pops up with images, how many images per page should there be
   PAGES_PER_DIALOG = 12
