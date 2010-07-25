@@ -25,6 +25,8 @@ gem 'dm-sqlite-adapter',    DM_VERSION
 #===REFINERY REQUIRED GEMS===
 git 'git://github.com/rails/rails.git'
 
+gem 'refinerycms', :path => '.'
+
 gem 'activesupport',    RAILS_VERSION, :require => 'active_support'
 gem 'actionmailer',     RAILS_VERSION, :require => 'action_mailer'
 gem 'actionpack',       RAILS_VERSION, :require => 'action_pack'
