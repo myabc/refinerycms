@@ -23,8 +23,6 @@ gem 'dm-sqlite-adapter',    DM_VERSION
 # gem 'aws-s3'
 
 #===REFINERY REQUIRED GEMS===
-git 'git://github.com/rails/rails.git'
-
 gem 'refinerycms',      :path => '.'
 
 gem 'activesupport',    RAILS_VERSION, :require => 'active_support'
@@ -42,8 +40,8 @@ gem 'dm-timestamps',    DM_VERSION
 gem 'dm-observer',      DM_VERSION
 gem 'dm-is-tree',       DM_VERSION
 gem 'dm-ar-finders',    DM_VERSION
-gem 'devise',           '~> 1.1.0', :git => 'git://github.com/plataformatec/devise'
-gem 'dm-devise',        '~> 0.1.0', :git => 'git://github.com/jm81/dm-devise'
+gem 'devise',           '~> 1.1.1'
+gem 'dm-devise',        '~> 1.1.0', :git => 'git://github.com/jm81/dm-devise'
 gem 'rmagick',        '~> 2.12.0'
 gem 'rack-cache',       :require => 'rack/cache'
 #gem 'dragonfly',        :git => 'git://github.com/myabc/dragonfly.git',
