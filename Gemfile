@@ -1,8 +1,8 @@
 source :rubygems
 
-RAILS_VERSION = '~> 3.0.0.beta4'
+RAILS_VERSION = '3.0.0.rc'
 DM_VERSION    = '~> 1.0.0'
-RSPEC_VERSION = '~> 2.0.0.beta.15'
+RSPEC_VERSION = '~> 2.0.0.beta.19'
 
 # Specify the database driver as appropriate for your application (only one is necessary).
 # Defaults to sqlite3. Don't remove any of these below in the core or gems won't install.
@@ -25,7 +25,7 @@ gem 'dm-sqlite-adapter',    DM_VERSION
 #===REFINERY REQUIRED GEMS===
 git 'git://github.com/rails/rails.git'
 
-gem 'refinerycms', :path => '.'
+gem 'refinerycms',      :path => '.'
 
 gem 'activesupport',    RAILS_VERSION, :require => 'active_support'
 gem 'actionmailer',     RAILS_VERSION, :require => 'action_mailer'
@@ -45,15 +45,22 @@ gem 'dm-ar-finders',    DM_VERSION
 gem 'devise',           '~> 1.1.0', :git => 'git://github.com/plataformatec/devise'
 gem 'dm-devise',        '~> 0.1.0', :git => 'git://github.com/jm81/dm-devise'
 gem 'rmagick',        '~> 2.12.0'
-gem 'rack-cache',     :require => 'rack/cache'
-#gem 'dragonfly',                  :git => 'git://github.com/myabc/dragonfly.git',        :branch => '1.9.2-fixes'
+gem 'rack-cache',       :require => 'rack/cache'
+#gem 'dragonfly',        :git => 'git://github.com/myabc/dragonfly.git',
+#                        :branch => '1.9.2-fixes'
 #gem 'acts_as_indexed', '= 0.6.3'
 #gem 'friendly_id',    '~> 3.0'
-gem 'truncate_html',   '= 0.3.2', :require => 'truncate_html'
-gem 'will_paginate',  '3.0.pre',:git => "git://github.com/mislav/will_paginate.git", :branch => 'rails3'
+gem 'truncate_html',    '= 0.3.2',
+                        :require => 'truncate_html'
+
+gem 'will_paginate',    '3.0.pre2',
+                        :git => "git://github.com/mislav/will_paginate.git",
+                        :branch => 'rails3'
 
 group :test do
-  #gem 'json_pure', :require => 'json/pure', :git => 'git://github.com/parndt/json.git', :branch => 'master'
+  #gem 'json_pure',      :require => 'json/pure',
+  #                      :git => 'git://github.com/parndt/json.git',
+  #                      :branch => 'master'
   gem 'rspec',              RSPEC_VERSION
   gem 'rspec-core',         RSPEC_VERSION, :require => 'rspec/core'
   gem 'rspec-expectations', RSPEC_VERSION, :require => 'rspec/expectations'
@@ -64,8 +71,6 @@ group :test do
   gem 'database_cleaner'
   gem 'cucumber-rails'
   gem 'cucumber'
-  gem 'rspec'
-  gem 'rspec-rails'
   gem 'spork' unless RUBY_PLATFORM =~ /mswin|mingw/
   gem 'launchy'
   gem 'gherkin'
