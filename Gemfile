@@ -47,7 +47,11 @@ gem 'rack-cache',       :require => 'rack/cache'
 #gem 'dragonfly',        :git => 'git://github.com/myabc/dragonfly.git',
 #                        :branch => '1.9.2-fixes'
 #gem 'acts_as_indexed', '= 0.6.3'
-#gem 'friendly_id',    '~> 3.0'
+gem 'friendly_id',      '~> 3.0.6',
+                        :git => 'http://github.com/myabc/friendly_id.git',
+                        :branch => 'datamapper'
+gem 'friendly_id_datamapper','~> 3.0.6',
+                        :git => 'http://github.com/myabc/friendly_id_datamapper.git'
 gem 'truncate_html',    '= 0.3.2',
                         :require => 'truncate_html'
 
