@@ -2,7 +2,7 @@ Rails::Application.routes.draw do
 
   devise_for :user, :controllers => { :sessions => 'sessions' }
 
-  scope(:path => 'refinery', :name_prefix => 'admin', :module => 'admin') do
+  scope(:path => 'refinery', :as => 'admin', :module => 'admin') do
     resources :users do
       collection do
         post :update_positions do

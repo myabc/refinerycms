@@ -37,7 +37,7 @@ module Refinery
     @major = 0
     @minor = 9
     @tiny  = 7
-    @build = 8
+    @build = 11
 
     def self.to_s
       [@major, @minor, @tiny, @build].compact.join('.')
@@ -60,16 +60,8 @@ require_dependency 'refinery/form_helpers'
 require_dependency 'refinery/base_presenter'
 
 RefineryEngine.class_eval do
-
   config.autoload_paths += %W( #{config.root}/lib )
-  #paths.lib = 'lib'
-
-  #initializer :add_marketable_routes do |app|
-  #  app.routes_reloader.paths << File.expand_path('../pages/marketable_routes.rb', __FILE__)
-  #end
-
 end
-
 
 [ Refinery.root.join("vendor", "plugins", "*", "app", "presenters").to_s,
   Refinery.root.join("app", "presenters").to_s

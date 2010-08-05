@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git://github.com/jm81/dm-devise
-  revision: 4f890ed
+  revision: ae26aa1
   specs:
     dm-devise (1.1.0)
       bcrypt-ruby (~> 2.1.2)
@@ -51,7 +51,7 @@ GIT
 PATH
   remote: .
   specs:
-    refinerycms (0.9.7.8)
+    refinerycms (0.9.7.11)
       refinerycms-authentication (= 1.0.0)
       refinerycms-core (= 1.0.0)
       refinerycms-dashboard (= 1.0.0)
@@ -166,7 +166,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     extlib (0.9.15)
-    factory_girl (1.3.1)
+    factory_girl (1.3.2)
     fastercsv (1.5.3)
     ffi (0.6.3)
       rake (>= 0.8.7)
@@ -185,7 +185,7 @@ GEM
       mime-types
       treetop (>= 1.4.5)
     mime-types (1.16)
-    nokogiri (1.4.2)
+    nokogiri (1.4.3.1)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-cache (0.5.2)
