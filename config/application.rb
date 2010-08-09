@@ -1,6 +1,5 @@
 require File.expand_path('../boot', __FILE__)
 
-
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 # require 'active_resource/railtie'
@@ -13,11 +12,9 @@ require 'rails/test_unit/railtie'
 # Auto-require default libraries and those for the current Rails environment.
 Bundler.require :default, Rails.env
 
-$LOAD_PATH << File.expand_path('../../vendor/engines/refinery/lib', __FILE__)
-require 'refinery'
-require File.expand_path('../../lib/refinery_initializer', __FILE__)
+require 'refinery/all'
 
-module Refinerycms
+module Refinery
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -64,8 +61,3 @@ end
 # You can set things in the following file and we'll try hard not to destroy them in updates, promise.
 # Note: These are settings that aren't dependent on environment type. For those, use the files in config/environments/
 require Rails.root.join('config', 'settings.rb').to_s
-
-# Bundler has shown a weakness using Rails < 3 so we are going to
-# require these dependencies here until we can find another solution or until we move to
-# Rails 3.0 which should fix the issue (or until Bundler fixes the issue).
-require_dependency 'will_paginate'

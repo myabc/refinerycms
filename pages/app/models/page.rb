@@ -118,7 +118,11 @@ class Page
   # to "/contact"
   def url
     if self.link_url.present?
-      self.link_url
+      if self.link_url =~ /^\// and ::Refinery::I18n.enabled?
+        "/#{::I18n.locale}#{self.link_url}"
+      else
+        self.link_url
+      end
     elsif use_marketable_urls?
       url_marketable
     elsif self.to_param.present?
@@ -189,11 +193,16 @@ class Page
   end
 
   # Returns all the top level pages, usually to render the top level navigation.
+<<<<<<< HEAD
   def self.top_level(include_children = false)
     include_associations = [:parts]
     include_associations.push(:slugs) if self.class.methods.include? "find_one_with_friendly"
     include_associations.push(:children) if include_children
     all(:parent_id => nil, :show_in_menu => true, :draft => false, :order => [ :position.asc ]) # :include => include_associations
+=======
+  def self.top_level
+    where(:show_in_menu => true, :draft => false).order('position ASC').includes(:slugs, :children, :parent, :parts)
+>>>>>>> rails3
   end
 
   # Accessor method to get a page part from a page.

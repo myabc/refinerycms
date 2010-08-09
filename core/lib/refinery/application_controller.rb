@@ -1,15 +1,32 @@
 class Refinery::ApplicationController < ActionController::Base
 
-  helper_method :home_page?, :local_request?, :just_installed?, :from_dialog?, :admin?, :login?
+  helper_method :home_page?,
+                :local_request?,
+                :just_installed?,
+                :from_dialog?,
+                :admin?,
+                :login?
+
   protect_from_forgery # See ActionController::RequestForgeryProtection
 
   include Crud # basic create, read, update and delete methods
   include AuthenticatedSystem
 
-  before_filter :find_or_set_locale, :find_pages_for_menu #, :show_welcome_page?
-  after_filter :store_current_location!, :if => Proc.new {|c| c.send(:refinery_user?) }
+  # Add or remove theme paths to/from Refinery application
+  # until we figure out how to make this reload elsewhere.
+  prepend_before_filter :attach_theme_to_refinery
 
-  rescue_from DataMapper::ObjectNotFoundError, ActionController::UnknownAction, ActionView::MissingTemplate, :with => :error_404
+  before_filter :find_or_set_locale,
+                :find_pages_for_menu,
+                :show_welcome_page?
+
+  after_filter :store_current_location!,
+               :if => Proc.new {|c| c.send(:refinery_user?) }
+
+  rescue_from DataMapper::ObjectNotFoundError,
+              ActionController::UnknownAction,
+              ActionView::MissingTemplate,
+              :with => :error_404
 
   def admin?
     controller_name =~ %r{^admin/}
@@ -32,7 +49,9 @@ class Refinery::ApplicationController < ActionController::Base
       render :template => "/pages/show", :status => 404, :format => 'html'
     else
       # fallback to the default 404.html page.
-      render :file => Rails.root.join("public", "404.html").cleanpath.to_s, :layout => false, :status => 404
+      render :file => Rails.root.join("public", "404.html").cleanpath.to_s,
+             :layout => false,
+             :status => 404
     end
   end
 
@@ -64,15 +83,12 @@ protected
 
   # get all the pages to be displayed in the site menu.
   def find_pages_for_menu
-    if (@menu_pages = Rails.cache.read(cache_key = "#{Refinery.base_cache_key}_menu_pages")).nil?
-      @menu_pages = Page.top_level(include_children = true)
-      Rails.cache.write(cache_key, @menu_pages) if @menu_pages.present?
-    end
+    @menu_pages = Page.top_level
   end
 
   # use a different model for the meta information.
   def present(model)
-    presenter = Object.const_get("#{model.class}Presenter") rescue ::Refinery::BasePresenter
+    presenter = (Object.const_get("#{model.class}Presenter") rescue ::Refinery::BasePresenter)
     @meta = presenter.new(model)
   end
 
@@ -99,13 +115,6 @@ protected
     render :template => "/welcome", :layout => "admin" if just_installed? and controller_name != "users"
   end
 
-  # todo: make this break in the next major version rather than aliasing.
-  alias_method :show_welcome_page, :show_welcome_page?
-
-  def take_down_for_maintenance?
-    logger.warn("*** Refinery::ApplicationController::take_down_for_maintenance has now been deprecated from the Refinery API. ***")
-  end
-
 private
   def store_current_location!
     if admin?
@@ -113,6 +122,30 @@ private
       session[:refinery_return_to] = request.path if request.get? and !request.xhr? and !from_dialog?
     elsif defined?(@page) and @page.present?
       session[:website_return_to] = @page.url
+    end
+  end
+
+  def attach_theme_to_refinery
+    # remove any paths relating to any theme.
+    view_paths.reject! { |v| v.to_s =~ %r{^themes/} }
+
+    # add back theme paths if there is a theme present.
+    if (theme = Theme.current_theme(request.env)).present?
+      # Set up view path again for the current theme.
+      view_paths.unshift Rails.root.join("themes", theme, "views").to_s
+
+      # Ensure that routes within the application are top priority.
+      # Here we grab all the routes that are under the application's view folder
+      # and promote them ahead of any other path.
+      view_paths.select{|p| p.to_s =~ /^app\/views/}.each do |app_path|
+        view_paths.unshift app_path
+      end
+    end
+
+    # Set up menu caching for this theme or lack thereof
+    if RefinerySetting.table_exists? and
+        RefinerySetting[:refinery_menu_cache_action_suffix] != (suffix = "#{"#{theme}_" if theme.present?}site_menu")
+      RefinerySetting[:refinery_menu_cache_action_suffix] = suffix
     end
   end
 

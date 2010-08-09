@@ -1,4 +1,4 @@
-Refinerycms::Application.configure do
+Refinery::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
   config.reload_plugins = true
 
@@ -20,4 +20,6 @@ Refinerycms::Application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   config.log_level = :debug
+
+  config.active_support.deprecation = :log
 end

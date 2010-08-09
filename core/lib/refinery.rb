@@ -1,5 +1,13 @@
 require 'active_support/dependencies'
 
+module RefineryStaticAssetsEngine
+  class Engine < Rails::Engine
+    initializer "static assets" do |app|
+      app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
+    end
+  end
+end
+
 module Refinery
 
   autoload :Plugin,  'refinery/plugin'
@@ -45,6 +53,11 @@ module Refinery
   end
 end
 
+require 'acts_as_indexed'
+require 'friendly_id'
+require 'truncate_html'
+require 'will_paginate'
+
 Refinery::Plugin.register do |plugin|
   plugin.title = "Refinery"
   plugin.name = "refinery_core"
@@ -61,6 +74,10 @@ require_dependency 'refinery/base_presenter'
 
 RefineryEngine.class_eval do
   config.autoload_paths += %W( #{config.root}/lib )
+
+  initializer :add_catch_all_routes do |app|
+    app.routes_reloader.paths << File.expand_path('../refinery/catch_all_routes.rb', __FILE__)
+  end
 end
 
 [ Refinery.root.join("vendor", "plugins", "*", "app", "presenters").to_s,

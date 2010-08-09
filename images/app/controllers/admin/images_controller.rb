@@ -46,7 +46,11 @@ class Admin::ImagesController < Admin::BaseController
   end
 
   def create
-    @image = Image.create(params[:image])
+    begin
+      @image = Image.create(params[:image])
+    rescue Dragonfly::Delegator::UnableToHandle
+      @image = Image.new
+    end
 
     unless params[:insert]
       if @image.valid?

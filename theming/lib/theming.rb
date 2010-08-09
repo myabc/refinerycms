@@ -1,17 +1,10 @@
 # Before the application gets setup this will fail badly if there's no database.
-require 'theme_server'
+require File.expand_path('../theme_server', __FILE__)
 
 module Refinery
-  class ThemesEngine < ::Rails::Engine
+  class ThemingEngine < ::Rails::Engine
 
-    config.autoload_paths += %W( #{config.root}/lib )
-
-    initializer 'themes.middleware' do |app|
-      app.config.middleware.use ThemeServer
-    end
-
-    initializer 'themes.configuration' do |app|
-=begin
+    config.to_prepare do
       ::Refinery::ApplicationController.module_eval do
 
         # Add or remove theme paths to/from Refinery application
@@ -22,7 +15,7 @@ module Refinery
           view_paths.reject! { |v| v.to_s =~ %r{^themes/} }
 
           # add back theme paths if there is a theme present.
-          if (theme = Theme.current_theme(request.env)).present?
+          if (theme = ::Theme.current_theme(request.env)).present?
             # Set up view path again for the current theme.
             view_paths.unshift Rails.root.join("themes", theme, "views").to_s
 
@@ -43,15 +36,12 @@ module Refinery
         protected :attach_theme_to_refinery
 
       end
-=end
-    end
 
-    initializer 'themes.helper' do |app|
-      # Include theme functions into application helper.
-      # ::Refinery::ApplicationHelper.send :include, ThemesHelper
-      # FIXME: we have to call include on the application's ApplicationHelper,
-      # as our helper methods do not get overriden otherwise.
-      ::ApplicationHelper.send :include, ThemesHelper
+      ::ApplicationHelper.send :include, ::ThemesHelper
+    end
+    
+    initializer 'themes.middleware' do |app|      
+      app.config.middleware.insert_before ::ActionDispatch::Static, ::Refinery::ThemeServer
     end
 
   end

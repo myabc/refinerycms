@@ -1,4 +1,4 @@
-Rails::Application.routes.draw do
+Refinery::Application.routes.draw do
   resources :pages
 
   scope(:path => 'refinery', :as => 'admin', :module => 'admin') do
@@ -11,7 +11,7 @@ Rails::Application.routes.draw do
     resources :page_parts
 
     resource :pages do
-      resources :dialogs, :controller => :page_dialogs do
+      resources :dialogs, :controller => :pages_dialogs do
         collection do
           get :link_to
           get :test_url
