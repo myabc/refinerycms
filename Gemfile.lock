@@ -34,7 +34,7 @@ GIT
 
 GIT
   remote: http://github.com/myabc/friendly_id_datamapper.git
-  revision: ac2e282
+  revision: 82beaf3
   specs:
     friendly_id_datamapper (3.0.6)
       dm-core (>= 1.0.0)
