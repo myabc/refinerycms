@@ -49,7 +49,7 @@ class RefinerySetting
   def title
     self.name.titleize
   end
-  
+
   def form_value
     unless self[:value].blank? or self[:value].is_a?(String)
       YAML::dump(self[:value])
@@ -84,9 +84,9 @@ class RefinerySetting
       setting = first_or_create(:name => name.to_s, :value => the_value)
 
       # if the database is not up to date yet then it won't know about certain fields.
-      setting.scoping = scoping if self.column_names.include?('scoping')
-      setting.restricted = restricted if self.column_names.include?('restricted')
-      if callback_proc_as_string.is_a?(String) and self.column_names.include?('callback_proc_as_string')
+      setting.scoping = scoping #if self.column_names.include?('scoping')
+      setting.restricted = restricted #if self.column_names.include?('restricted')
+      if callback_proc_as_string.is_a?(String) #and self.column_names.include?('callback_proc_as_string')
         setting.callback_proc_as_string = callback_proc_as_string
       end
 
@@ -170,8 +170,8 @@ class RefinerySetting
   end
 
   def callback_proc
-    if RefinerySetting.column_names.include?('callback_proc_as_string') and
-       self.callback_proc_as_string.present?
+    #if RefinerySetting.column_names.include?('callback_proc_as_string') and
+    if self.callback_proc_as_string.present?
       eval "Proc.new{#{self.callback_proc_as_string} }"
     end
   end
@@ -179,7 +179,8 @@ class RefinerySetting
   private
 
   def check_restriction
-    if self.class.column_names.include?('restricted') and restricted.nil?
+    #if self.class.column_names.include?('restricted') and
+    if restricted.nil?
       self.restricted = false
     end
   end
