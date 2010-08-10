@@ -193,16 +193,8 @@ class Page
   end
 
   # Returns all the top level pages, usually to render the top level navigation.
-<<<<<<< HEAD
-  def self.top_level(include_children = false)
-    include_associations = [:parts]
-    include_associations.push(:slugs) if self.class.methods.include? "find_one_with_friendly"
-    include_associations.push(:children) if include_children
-    all(:parent_id => nil, :show_in_menu => true, :draft => false, :order => [ :position.asc ]) # :include => include_associations
-=======
   def self.top_level
-    where(:show_in_menu => true, :draft => false).order('position ASC').includes(:slugs, :children, :parent, :parts)
->>>>>>> rails3
+    all(:show_in_menu => true, :draft => false, :order => [:position.asc])
   end
 
   # Accessor method to get a page part from a page.
