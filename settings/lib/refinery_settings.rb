@@ -1,3 +1,5 @@
+require 'dm-types'
+
 Refinery::Plugin.register do |plugin|
   plugin.title = "Settings"
   plugin.name = "refinery_settings"

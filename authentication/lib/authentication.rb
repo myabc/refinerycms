@@ -1,4 +1,4 @@
-require 'authlogic'
+require 'devise'
 
 Refinery::Plugin.register do |plugin|
   plugin.title = "Users"

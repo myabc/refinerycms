@@ -53,7 +53,6 @@ module Refinery
   end
 end
 
-require 'acts_as_indexed'
 require 'friendly_id'
 require 'truncate_html'
 require 'will_paginate'

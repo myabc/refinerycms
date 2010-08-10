@@ -1,3 +1,5 @@
+require 'dm-is-tree'
+
 Refinery::Plugin.register do |plugin|
   plugin.title = "Pages"
   plugin.name = "refinery_pages"
