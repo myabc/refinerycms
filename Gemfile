@@ -37,7 +37,6 @@ gem 'refinerycms', version, :path => '.'
 # gem 'refinerycms-pages'
 # gem 'refinerycms-resources'
 # gem 'refinerycms-settings'
-# gem 'refinerycms-theming'
 
 # Specify additional Refinery CMS Engines here:
 # gem 'refinerycms-news',       '~> 0.9.8', :require => 'news'
@@ -58,7 +57,7 @@ gem 'friendly_id_datamapper','~> 3.0.6',
                         :git => 'http://github.com/myabc/friendly_id_datamapper.git'
 
 group :test do
-  gem 'json_pure',      '= 1.4.5', :require => 'json/pure'
+  gem 'json_pure',      '= 1.4.6', :require => 'json/pure'
 
   gem 'rspec',              (RSPEC_VERSION = '~> 2.0.0.beta.19')
   gem 'rspec-core',         RSPEC_VERSION, :require => 'rspec/core'
