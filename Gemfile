@@ -25,18 +25,17 @@ gem 'dm-sqlite-adapter',    DM_VERSION
 # Add i18n support
 gem 'routing-filter'
 
-version = '0.9.8'
-# Use the default Refinery CMS Engines:
-gem 'refinerycms', version, :path => '.'
-
-# Alternatively, cherry-pick the Refinery CMS Engines you wish to use:
-# gem 'refinerycms-authentication'
-# gem 'refinerycms-dashboard'
-# gem 'refinerycms-inquiries'
-# gem 'refinerycms-images'
-# gem 'refinerycms-pages'
-# gem 'refinerycms-resources'
-# gem 'refinerycms-settings'
+# Specify the Engines to use:
+path 'vendor/refinerycms' do
+  gem 'refinerycms-core', :require => 'refinery'
+  gem 'refinerycms-authentication', :require => 'authentication'
+  gem 'refinerycms-dashboard', :require => 'dashboard'
+  gem 'refinerycms-inquiries', :require => 'inquiries'
+  gem 'refinerycms-images', :require => 'images'
+  gem 'refinerycms-pages', :require => 'pages'
+  gem 'refinerycms-resources', :require => 'resources'
+  gem 'refinerycms-settings', :require => 'settings'
+end
 
 # Specify additional Refinery CMS Engines here:
 # gem 'refinerycms-news',       '~> 0.9.8', :require => 'news'

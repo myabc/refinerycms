@@ -6,18 +6,20 @@ Feature: Dashboard
 
   Background:
     Given I am a logged in refinery user
+    And my locale is en
     When I go to the Dashboard
 
-   Scenario: Add New Page Button
+  Scenario: Add New Page Button
+    Given I have no pages
     When I follow "Add a new page"
     Then I should be on the new page form
     When I fill in "Title" with "Page test from Dashboard"
     And I press "Save"
-    Then I should be on the dashboard
+    Then I should be on the Dashboard
     And I should see "'Page test from Dashboard' was successfully created."
-    And I should see "Page test from dashboard page was created"
+    And I should have 1 page
 
-   Scenario: Update a Page Button
+  Scenario: Update a Page Button
     When I follow "Update a page"
     Then I should be on the list of pages
 
@@ -29,7 +31,7 @@ Feature: Dashboard
     When I follow "Upload an image"
     Then I should be on the new image form
 
-   Scenario: See Home Page Button
+  Scenario: See Home Page Button
     When I follow "See home page"
     Then I should be on the home page
 
@@ -41,12 +43,12 @@ Feature: Dashboard
     When I go to the dashboard
     And I follow "English Change Language"
     And I follow "Slovenian"
-    Then I should be on the dashboard
+    Then I should be on the Dashboard
     And I should see "Slovenian Spremeni Jezik"
     And I should not see "Switch to your website"
     # Back to English
     When I follow "Slovenian Spremeni Jezik"
     And I follow "English"
-    Then I should be on the dashboard
+    Then I should be on the Dashboard
     And I should see "Switch to your website"
     And I should not see "Spremeni Jezik"

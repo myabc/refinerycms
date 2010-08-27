@@ -1,3 +1,4 @@
+@pages @pages-manage
 Feature: Manage Pages
   In order to control the content on my website
   As an administrator
@@ -41,5 +42,5 @@ Feature: Manage Pages
   Scenario: Delete Page
     Given I have test page titled "test"
     When I go to the list of pages
-    And I follow "Delete this page"
-    Then I should see "'test' was successfully destroyed. "
+    And I follow "Remove this page forever"
+    Then I should see "'test' was successfully destroyed."
