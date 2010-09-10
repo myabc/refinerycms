@@ -1,5 +1,5 @@
 class SessionsController < Devise::SessionsController
-  layout 'admin'
+  layout 'login'
 
 =begin
   before_filter :redirect?, :only => [:new, :create]

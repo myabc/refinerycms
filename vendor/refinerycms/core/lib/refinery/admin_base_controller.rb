@@ -1,6 +1,6 @@
 class Refinery::AdminBaseController < ApplicationController
 
-  layout proc { |controller| "admin#{"_dialog" if controller.from_dialog?}" }
+  layout :layout?
 
   before_filter :correct_accept_header, :authenticate_user!, :restrict_plugins, :restrict_controller
   after_filter :store_location?, :except => [:new, :create, :edit, :update, :destroy, :update_positions] # for redirect_back_or_default
@@ -20,12 +20,12 @@ class Refinery::AdminBaseController < ApplicationController
       params[:action] = 'error_404'
       # change any links in the copy to the admin_root_url
       # and any references to "home page" to "Dashboard"
-      #TODO Add language
-      @page[part_symbol] = @page[Page.default_parts.first.to_sym].gsub(
+      part_symbol = Page.default_parts.first.to_sym
+      @page[part_symbol] = @page[part_symbol].gsub(
                             /href=(\'|\")\/(\'|\")/, "href='#{admin_root_url(:only_path => true)}'"
                            ).gsub("home page", "Dashboard")
 
-      render :template => "/pages/show", :status => 404
+      render :template => "/pages/show", :status => 404, :layout => layout?
     else
       # fallback to the default 404.html page.
       render :file => Rails.root.join("public", "404.html").cleanpath.to_s, :layout => false, :status => 404
@@ -33,14 +33,6 @@ class Refinery::AdminBaseController < ApplicationController
   end
 
 protected
-  def find_or_set_locale
-    if (params[:set_locale].present? and ::Refinery::I18n.locales.include?(params[:set_locale].to_sym))
-      ::Refinery::I18n.current_locale = params[:set_locale].to_sym
-      redirect_back_or_default(admin_dashboard_path) and return
-    else
-      I18n.locale = ::Refinery::I18n.current_locale
-    end
-  end
 
   def group_by_date(records)
     new_records = []
@@ -55,7 +47,7 @@ protected
   end
 
   def restrict_plugins
-    Refinery::Plugins.set_active( current_user.authorized_plugins ) if current_user.respond_to? :plugins
+    Refinery::Plugins.set_active(current_user.authorized_plugins) if current_user.respond_to?(:plugins)
   end
 
   def restrict_controller
@@ -72,6 +64,10 @@ protected
   def find_pages_for_menu; end
 
 private
+  def layout?
+    "admin#{"_dialog" if from_dialog?}"
+  end
+
   # This fixes the issue where Internet Explorer browsers are presented with a basic auth dialogue
   # rather than the xhtml one that they *can* accept but don't think they can.
   def correct_accept_header

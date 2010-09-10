@@ -15,7 +15,7 @@ module Refinery
 
     def find_by_model(model)
       model = model.constantize if model.is_a? String
-      self.detect { |plugin| not plugin.activity.detect {|activity| activity.class == model }.nil? }
+      self.detect { |plugin| plugin.activity.any? {|activity| activity.class == model } }
     end
 
     def find_activity_by_model(model)
@@ -52,7 +52,7 @@ module Refinery
     end
 
     def self.always_allowed
-      registered.reject { |p| !p.always_allow_access }
+      registered.reject { |p| !p.always_allow_access? }
     end
 
     def self.set_active(names)

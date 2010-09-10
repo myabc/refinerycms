@@ -25,7 +25,7 @@ acronym {
 label[for] {
   cursor: pointer;
 }
-#page_container, #site_bar_content, #header_content {
+#page_container, #site_bar_content, header {
   margin: 0px auto 10px auto;
   text-align: left;
   width: 990px;
@@ -120,7 +120,7 @@ hr {
 .fieldWithErrors iframe, .fieldWithErrors .wym_box {
   border-color: red !important;
 }
-#message, #flash {
+#message, .flash {
   padding: 8px 8px 8px 30px;
   margin-bottom: 15px;
   position: relative;
@@ -138,48 +138,59 @@ hr {
   color: #A00027;
   background: 7px 7px no-repeat url('/images/refinery/icons/cancel.png') #FFB1B1;
 }
-#flash.flash_notice #flash_close, #flash.flash_error #flash_close {
+.flash.flash_notice #flash_close, .flash.flash_error #flash_close {
   text-transform: lowercase;
 }
-#flash.flash_message {
+.flash.flash_message {
   background: #E0F5E0;
   padding: 9px;
   position: relative;
   margin-bottom: 32px;
 }
-#flash.flash_message h2 {
+.flash.flash_message h2 {
   margin-top: 12px;
 }
 .flash_message, .flash_message * {
   color: #262719;
   font-size: 14px;
 }
-#flash a, #flash a:hover {
+.flash a, .flash a:hover {
   color: #e20003;
   border-bottom-color: #e20003;
 }
-#flash.flash_error a, #flash.flash_error a:hover {
+.flash.flash_error a, .flash.flash_error a:hover {
   display: none;
 }
-#flash a#flash_close {
+noscript .flash.flash_error a, noscript .flash.flash_error a:hover {
+  display: inline;
+  font-weight: bold;
+}
+.flash a#flash_close {
   position: absolute;
   right: 9px;
   top: 7px;
 }
-#flash.flash_message a#flash_close {
+.flash.flash_message a#flash_close {
   top: 21px;
 }
-#header a, #content a {
+#content a {
   border-bottom: 1px dotted #727272;
 }
 a {
   color: #41403C;
   text-decoration: none;
 }
+a:hover {
+  color: #000;
+  border-bottom: 1px solid #727272;
+}
+header a, header a:hover {
+  border-bottom: 0px none;
+}
 #content .wym_box a, #content .ui-tabs a {
   border-bottom: 0px none;
 }
-.splash #content {
+.index #content, .splash #content {
   background-color: white;
   background-repeat: repeat-y;
 }
@@ -193,27 +204,23 @@ a {
 .less-important {
   color: #727272;
 }
-#header a {
-  border: 0px;
-}
-a:hover {
-  color: #000;
-  border-bottom: 1px solid #727272;
-}
 a#site_bar_refinery_cms_logo {
   left: 448px;
 }
 #content, #page_container {
   background-color: white;
 }
-body.login #page_container, body.login #site_bar_content, body.login #header_content {
-  width: 590px;
+body.login #site_bar_content, body.login header {
+  width: 650px;
 }
 body.login #page_container {
-  width: 560px;
+  width: 620px;
 }
-body.login #header_content {
+body.login header {
   background: #eaeaea;
+}
+header, footer, nav {
+  display: block;
 }
 body.login #site_bar_content a#site_bar_refinery_cms_logo {
   left: 247px;
@@ -281,21 +288,23 @@ body.login .fieldWithErrors input.larger {
   background-position: 0px -82px;
   border: 1px solid red;
 }
-#header_content {
+header {
   height: 60px;
   position: relative;
   margin-bottom: 0px;
 }
-body.login #header_content h1 {
+body.login header h1 {
   color: #41403c;
   vertical-align: middle;
   text-align: center;
   font-weight: bold;
   font-size: 18px;
   padding-bottom: 0px;
-  line-height: 60px;
+  line-height: 30px;
+  padding-top: 15px;
+  min-height: 60px;
 }
-#menu, #header_content .jcarousel-container {
+#menu, header .jcarousel-container {
   display: block;
   margin: 0px;
   padding: 0px;
@@ -305,23 +314,23 @@ body.login #header_content h1 {
   right: 0px;
   background: transparent;
 }
-#header_content .jcarousel-container {
+header .jcarousel-container {
   position: absolute !important;
 }
-#header_content .jcarousel-container .jcarousel-prev,
-  #header_content .jcarousel-container .jcarousel-next {
+header .jcarousel-container .jcarousel-prev,
+  header .jcarousel-container .jcarousel-next {
   position: absolute;
   top: 13px;
   cursor: pointer;
 }
-#header_content .jcarousel-container .jcarousel-prev {
+header .jcarousel-container .jcarousel-prev {
   left: -20px;
 }
-#header_content .jcarousel-container .jcarousel-next {
+header .jcarousel-container .jcarousel-next {
   right: -20px;
 }
-#header_content .jcarousel-container .jcarousel-prev-disabled,
-  #header_content .jcarousel-container .jcarousel-next-disabled {
+header .jcarousel-container .jcarousel-prev-disabled,
+  header .jcarousel-container .jcarousel-next-disabled {
   display: none !important;
 }
 #menu.ui-sortable a {
@@ -350,7 +359,7 @@ body.login #header_content h1 {
   padding: 11px 13px;
   margin-top: 0px;
 }
-#menu a#menu_reorder, #header #menu a#menu_reorder_done {
+#menu a#menu_reorder, header #menu a#menu_reorder_done {
   height: 14px;
   width: 14px;
   margin-top: 11px;
@@ -378,12 +387,12 @@ pre {
 #site_link:hover {
   text-decoration: underline;
 }
-#header #logo {
+header #logo {
   position: absolute;
   right: 20px;
   top: 25px;
 }
-#header h1, #header h1 a {
+header h1, header h1 a {
   color: white;
   font-size: 20px;
   font-weight: normal;
@@ -391,7 +400,7 @@ pre {
   padding-bottom: 4px;
   margin-top: 0;
 }
-#header p {
+header p {
   color: white;
   font-size: 90%;
   padding: 0;
@@ -412,9 +421,14 @@ pre {
   line-height: 35px;
   position: relative;
 }
+#records > #recent_activity > ul li, #records > #recent_inquiries > ul li {
+  max-height: 35px;
+}
+/*
 #records > ul.ui-sortable li {
   position: static;
 }
+*/
 #content #records > ul li .actions a {
   line-height: 29px;
 }
@@ -492,87 +506,19 @@ pre {
 #records.tree ul li > div:hover, .tree ul li > div:hover {
   background-color: #EAEAEA;
 }
+/*
 #records.tree ul.ui-sortable li div:hover, .tree ul.ui-sortable li div:hover {
   background-color: inherit;
 }
+*/
 #records ul#sortable_list {
   margin-top: 6px;
 }
-.ui-sortable .nested{
-  padding:5px;
-  margin:5px 0;
-}
-#records ul#sortable_list.ui-sortable {
-  margin-top: 0px;
-}
-#content .ui-sortable li.hover {
-  height: 300%;
-  display: block;
-}
-#content .ui-sortable {
-  margin: 0;
-  padding: 12px 0px;
-}
-#content #records > .ui-sortable {
-  padding-top: 10px;
-}
-#content #records ul.ui-sortable li ul, #content .ui-sortable li ul {
-  padding: 6px 10px 12px 40px;
-}
-#content #records ul.ui-sortable li, #content ul.ui-sortable li {
-  background-image: none;
-  background-color: #EAEAEA;
+
+#sortable_list.reordering > li {
   cursor: move;
-  border: 1px solid #ccc;
-  margin-bottom: 6px;
-  padding: 3px 0px 0px 3px;
 }
-#content #records ul.ui-sortable li ul li, #content ul.ui-sortable li {
-  background-color: #F2F2F2;
-}
-#content ul.ui-sortable li ul.empty {
-  display: block;
-}
-#content ul.ui-sortable li ul li.empty {
-  border: 0px none;
-}
-#content .ui-sortable .actions {
-  display: none !important;
-}
-#content .ui-sortable ul.spacing li {
-  display: block;
-  border: 0px none;
-}
-#content .ui-sortable ul {
-  min-height: 12px;
-}
-#content .ui-sortable li.placeholder {
-  opacity: 0.7;
-  border-width: 2px;
-  border-style: dashed;
-  height: 38px;
-}
-#content .tree .ui-sortable li.placeholder {
-  height: 38px;
-  border-width: 2px;
-  position: relative;
-  background: #22A7F2 !important;
-  margin:5px 0;
-}
-#content #records .tree .ui-sortable li.helper, #content .tree .ui-sortable li.helper {
-  opacity: 0.5 !important;
-}
-#content .tree .ui-sortable li.below-placeholder {
-}
-#content ul.ui-sortable li.ui-sortable-helper {
-  height: 38px !important;
-}
-#content ul.ui-sortable li.ui-sortable-helper ul {
-  display: none;
-}
-.ui-sortable-helper {
-  opacity: 0.7;
-}
+
 #content h2 {
   font-size: 18px;
   color:#41403c;
@@ -580,6 +526,7 @@ pre {
   margin-top: 10px;
   font-weight: bold;
 }
+
 #records h2, #actions h2 {
   margin-top: 0px;
 }
@@ -812,8 +759,8 @@ body.dialog form {
 }
 .dialog span.radio {
   display: block;
-  line-height: 36px;
-  height: 36px;
+  line-height: 18px;
+  padding: 6px 0px;
 }
 .dialog span.radio * {
   cursor: pointer;

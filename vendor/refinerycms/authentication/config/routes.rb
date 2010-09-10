@@ -20,7 +20,7 @@ Refinery::Application.routes.draw do
   resources :users, :only => [:new, :create] do
     collection do
       get :forgot
-      get :reset
+      post :forgot
     end
   end
 

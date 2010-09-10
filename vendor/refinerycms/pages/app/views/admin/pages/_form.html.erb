@@ -1,6 +1,12 @@
 <% url_opts = action_name == 'edit' ? {:url => admin_page_path(@page.id)} : {} %>
 <%= form_for [:admin, @page], url_opts do |f| %>
-  <%= f.error_messages  %>
+
+  <%= render :partial => "/shared/admin/error_messages",
+             :locals => {
+               :object => @page,
+               :include_object_name => true
+             } %>
+
   <div class="field">
     <%= f.label :title %>
     <%= f.text_field :title, :class => "larger widest" %>
@@ -21,7 +27,7 @@
              :locals => {
                :f => f,
                :continue_editing => true,
-               :delete_title => t('shared.admin.delete.title', :object_name => @page.class.model_name.human),
+               :delete_title => t('admin.pages.delete'),
                :delete_confirmation => t('shared.admin.delete.message', :title => @page.title)
              } %>
 

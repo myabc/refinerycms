@@ -26,6 +26,7 @@ class Page
 
   is :tree, :order => :position.asc
 
+
   # Docs for friendly_id http://github.com/norman/friendly_id
   # has_friendly_id :title, :use_slug => true,
   #                :reserved_words => %w(index new session login logout users refinery admin images wymiframe)
@@ -118,15 +119,20 @@ class Page
   # to "/contact"
   def url
     if self.link_url.present?
-      if self.link_url =~ /^\// and ::Refinery::I18n.enabled?
-        "/#{::I18n.locale}#{self.link_url}"
-      else
-        self.link_url
-      end
+      link_url_localised?
     elsif use_marketable_urls?
       url_marketable
     elsif self.to_param.present?
       url_normal
+    end
+  end
+
+  def link_url_localised?
+    if self.link_url =~ /^\// and defined?(::Refinery::I18n) and ::Refinery::I18n.enabled? and
+       ::I18n.locale != ::Refinery::I18n.default_frontend_locale
+      "/#{::I18n.locale}#{self.link_url}"
+    else
+      self.link_url
     end
   end
 
@@ -205,7 +211,7 @@ class Page
 
     # Returns all the top level pages, usually to render the top level navigation.
     def top_level(include_children = false)
-      all(:show_in_menu => true, :draft => false, :order => [:position.asc])
+      self.roots.all(:show_in_menu => true, :draft => false)
     end
   end
 
@@ -220,7 +226,10 @@ class Page
     # the way that we call page parts seems flawed, will probably revert to page.parts[:title] in a future release.
     if (super_value = super).blank?
       # self.parts is already eager loaded so we can now just grab the first element matching the title we specified.
-      part = self.parts.detect {|part| (part.title == part_title.to_s) || (part.title.downcase.gsub(" ", "_") == part_title.to_s.downcase.gsub(" ", "_")) }
+      part = self.parts.detect do |part|
+        part.title == part_title.to_s or
+        part.title.downcase.gsub(" ", "_") == part_title.to_s.downcase.gsub(" ", "_")
+      end
 
       return part.body unless part.nil?
     end

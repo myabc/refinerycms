@@ -17,10 +17,10 @@ class RefinerySetting
   # FIXME: DM Porting
   # serialize :callback_proc_as_string
 
-  # Number of settings to show per page when using will_paginate
-  def self.per_page
-    12
-  end
+  # FIXME: DM Porting
+  # before_save do |setting|
+  #  setting.restricted = false if setting.restricted.nil?
+  # end
 
   before :save, :check_restriction
 
@@ -28,20 +28,126 @@ class RefinerySetting
     #if self.class.column_names.include?('scoping')
     #  self.class.cache_write(setting.name, setting.scoping.presence, setting.value)
     #else
-      self.class.cache_write(self.name, nil, self.value)
+      self.class.rewrite_cache
     #end
   end
 
-  def self.cache_key(name, scoping)
-    "#{Refinery.base_cache_key}_refinery_setting_#{name}#{"_with_scoping_#{scoping}" if scoping.present?}"
-  end
+  class << self
+    # Number of settings to show per page when using will_paginate
+    def per_page
+      12
+    end
 
-  def self.cache_read(name, scoping)
-    Rails.cache.read(cache_key(name, scoping))
-  end
+    def ensure_cache_exists!
+      if (result = Rails.cache.read(self.cache_key)).nil?
+        result = rewrite_cache
+      end
 
-  def self.cache_write(name, scoping, value)
-    Rails.cache.write(cache_key(name, scoping), value)
+      result
+    end
+    protected :ensure_cache_exists!
+
+    def cache_read(name = nil, scoping = nil)
+      result = ensure_cache_exists!
+
+      if name.present?
+        result = result.detect do |rs|
+          rs[:name] == name.to_s.downcase.to_sym and rs[:scoping] == scoping
+        end
+        result = result[:value] if !result.nil? and result.keys.include?(:value)
+      end
+
+      result
+    end
+
+    def to_cache(settings)
+      settings.collect do |rs|
+        {
+          :name => rs.name.to_s.downcase.to_sym,
+          :value => rs.value,
+          :scoping => rs.scoping,
+          :destroyable => rs.destroyable
+        }
+      end
+    end
+
+    def rewrite_cache
+      # delete cache
+      Rails.cache.delete(self.cache_key)
+
+      # generate new cache
+      result = self.to_cache(RefinerySetting.all)
+
+      # write cache
+      Rails.cache.write(self.cache_key, result)
+
+      # return cache
+      result
+    end
+
+    def cache_key
+      "#{Refinery.base_cache_key}_refinery_settings_cache"
+    end
+
+    # find_or_set offers a convenient way to
+    def find_or_set(name, the_value, options={})
+      options = {:scoping => nil, :restricted => false, :callback_proc_as_string => nil}.merge(options)
+      # Try to get the value from cache first.
+      scoping = options[:scoping]
+      restricted = options[:restricted]
+      callback_proc_as_string = options[:callback_proc_as_string]
+
+      # try to find the setting first
+      value = cache_read(name, scoping)
+
+      # if the setting's value is nil, store a new one using the existing functionality.
+      value = set(name, options.merge({:value => the_value})) if value.nil?
+
+      # Return what we found.
+      value
+    end
+
+    alias :get_or_set :find_or_set
+
+    # Retrieve the current value for the setting whose name is supplied.
+    def get(name)
+      cache_read(name)
+    end
+
+    alias :[] :get
+
+    def set(name, value)
+      scoping = (value.is_a?(Hash) and value.has_key?(:scoping)) ? value[:scoping] : nil
+      setting = find_or_initialize_by_name_and_scoping(:name => name.to_s, :scoping => scoping)
+
+      # you could also pass in {:value => 'something', :scoping => 'somewhere'}
+      unless value.is_a?(Hash) and value.has_key?(:value)
+        setting.value = value
+      else
+        setting.value = value[:value]
+        setting.scoping = value[:scoping] if value.has_key?(:scoping)
+        setting.callback_proc_as_string = value[:callback_proc_as_string] if value.has_key?(:callback_proc_as_string)
+        setting.destroyable = value[:destroyable] if value.has_key?(:destroyable)
+      end
+
+      # Save because we're in a setter method.
+      setting.save
+
+      # Return the value
+      setting.value
+    end
+
+    # DEPRECATED for removal at >= 0.9.9
+    def []=(name, value)
+      warning = ["\n*** DEPRECATION WARNING ***"]
+      warning << "You should not use this anymore: RefinerySetting[#{name.inspect}] = #{value.inspect}."
+      warning << "\nInstead, you should use RefinerySetting.set(#{name.inspect}, #{value.inspect})"
+      warning << ""
+      warning << "Called from: #{caller.first.inspect}\n\n"
+      $stdout.puts warning.join("\n")
+
+      set(name, value)
+    end
   end
 
   # prettier version of the name.
@@ -50,6 +156,7 @@ class RefinerySetting
     self.name.titleize
   end
 
+  # form_value is so that on the web interface we can display a sane value.
   def form_value
     unless self[:value].blank? or self[:value].is_a?(String)
       YAML::dump(self[:value])
@@ -58,131 +165,48 @@ class RefinerySetting
     end
   end
 
-  # Access method that allows dot notation to work.
-  # Say you had a setting called "site_name". You could access that by going RefinerySetting[:site_name]
-  # but with this you can also access that by going RefinerySettting.site_name
-=begin
-  def self.method_missing(method, *args)
-    method_name = method.to_s
-    super(method, *args)
-
-  rescue NoMethodError
-    if method_name =~ /=$/
-      self[method_name.gsub('=', '')] = args.first
-    else
-      self[method_name]
-    end
-  end
-=end
-
-  def self.find_or_set(name, the_value, options={})
-    # Try to get the value from cache first.
-    scoping = options[:scoping]
-    restricted = options[:restricted]
-    callback_proc_as_string = options[:callback_proc_as_string]
-    if (value = cache_read(name, scoping)).nil?
-      setting = first_or_create(:name => name.to_s, :value => the_value)
-
-      # if the database is not up to date yet then it won't know about certain fields.
-      setting.scoping = scoping #if self.column_names.include?('scoping')
-      setting.restricted = restricted #if self.column_names.include?('restricted')
-      if callback_proc_as_string.is_a?(String) #and self.column_names.include?('callback_proc_as_string')
-        setting.callback_proc_as_string = callback_proc_as_string
-      end
-
-      setting.save
-
-      # cache whatever we found including its scope in the name, even if it's nil.
-      cache_write(name, scoping, (value = setting.try(:value)))
-    end
-
-    # Return what we found.
-    value
+  def value
+    replacements!(self[:value])
   end
 
-  def self.[](name)
-    # Try to get the value from cache first.
-    if (value = cache_read(name, (scoping = nil))).nil?
-      # Not found in cache, try to find the record itself and cache whatever we find.
-      value = cache_write(name, scoping, self.find_by_name(name.to_s).try(:value))
+  def value=(new_value)
+    # must convert to string if true or false supplied otherwise it becomes 0 or 1, unfortunately.
+    if %w(trueclass falseclass).include?(new_value.class.to_s.downcase)
+      new_value = new_value.to_s
     end
-
-    # Return what we found.
-    value
+    
+    super
   end
 
-  def self.[]=(name, value)
-    setting = self.first_or_new(:name => name.to_s)
-
-    scoping = nil
-    # you could also pass in {:value => 'something', :scoping => 'somewhere'}
-    unless value.is_a?(Hash) and value.has_key?(:value)
-      setting.value = value
-    else
-      setting.value = value[:value]
-      if value.has_key?(:scoping) and setting.class.column_names.include?('scoping')
-        scoping, setting.scoping = value[:scoping]
-      end
-      if value.has_key?(:callback_proc_as_string) and
-         setting.class.column_names.include?('callback_proc_as_string')
-        setting.callback_proc_as_string = value[:callback_proc_as_string]
-      end
-    end
-
-    setting.save
-    cache_write(setting.name, scoping, setting.value)
+  def callback_proc
+    eval("Proc.new{#{self.callback_proc_as_string} }") if self.callback_proc_as_string.present?
   end
 
+private
   # Below is not very nice, but seems to be required. The problem is when Rails
   # serialises a fields like booleans it doesn't retrieve it back out as a boolean
   # it just returns a string. This code maps the two boolean values
   # correctly so that a boolean is returned instead of a string.
   REPLACEMENTS = {"true" => true, "false" => false}
 
-  def value
-    unless (current_value = self[:value]).nil?
-      # This bit handles true and false so that true and false are actually returned
-      # not "0" and "1"
-      REPLACEMENTS.each do |current, new_value|
-        current_value = new_value if current_value == current
+  def replacements!(current_value)
+    # This bit handles true and false so that true and false are actually returned
+    # not "0" and "1"
+    REPLACEMENTS.each do |current, new_value|
+      current_value = new_value if current_value == current
+    end
+
+    # converts the serialised value back to an integer
+    # if the value is an integer
+    begin
+      if current_value.to_i.to_s == current_value
+        current_value = current_value.to_i
       end
-
-      # converts the serialised value back to an integer
-      # if the value is an integer
-      begin
-        if current_value.to_i.to_s == current_value
-          current_value = current_value.to_i
-        end
-      rescue
-        current_value
-      end
+    rescue
+      current_value
     end
 
-    return current_value
-  end
-
-  def value=(new_value)
-    # must convert to string if true or false supplied otherwise it becomes 0 or 1, unfortunately.
-    if ["trueclass","falseclass"].include?(new_value.class.to_s.downcase)
-      new_value = new_value.to_s
-    end
-    self[:value] = new_value
-  end
-
-  def callback_proc
-    #if RefinerySetting.column_names.include?('callback_proc_as_string') and
-    if self.callback_proc_as_string.present?
-      eval "Proc.new{#{self.callback_proc_as_string} }"
-    end
-  end
-
-  private
-
-  def check_restriction
-    #if self.class.column_names.include?('restricted') and
-    if restricted.nil?
-      self.restricted = false
-    end
+    current_value
   end
 
 end

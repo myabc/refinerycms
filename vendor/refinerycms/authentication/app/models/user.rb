@@ -51,7 +51,7 @@ class User
 
   def deliver_password_reset_instructions!(request)
     reset_perishable_token!
-    UserMailer.deliver_reset_notification(self, request)
+    UserMailer.reset_notification(self, request).deliver
   end
 
   #-------------------------------------------------------------------------------------------------
