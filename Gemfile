@@ -46,7 +46,7 @@ gem 'sqlite3-ruby',             :require => 'sqlite3'
 gem 'refinerycms',              :path => '.'
 
 # Specify additional Refinery CMS Engines here (all optional):
-gem 'refinerycms-inquiries',    '~> 0.9.8.7'
+# gem 'refinerycms-inquiries',    '~> 0.9.8.7'
 # gem 'refinerycms-news',       '~> 0.9.9'
 # gem 'refinerycms-portfolio',  '~> 0.9.8'
 # gem 'refinerycms-theming',    '~> 0.9.8'
@@ -58,15 +58,6 @@ gem 'refinerycms-i18n',         '~> 0.9.8.6', :require => 'refinery/i18n'
 gem 'rmagick',                  '~> 2.12.0', :require => false
 
 # END REFINERY CMS ============================================================
-
-# FIXME: These requirements are listed here temporarily pending a release
-gem 'dm-rails',         DM_VERSION, :git => 'git://github.com/datamapper/dm-rails'
-gem 'dm-devise',        '~> 1.1.0', :git => 'git://github.com/jm81/dm-devise'
-# gem 'dragonfly',        :git => 'git://github.com/myabc/dragonfly.git',
-#                         :branch => '1.9.2-fixes'
-gem 'friendly_id',      '~> 3.1.0'
-gem 'friendly_id_datamapper','~> 3.1.0',
-                        :git => 'git://github.com/myabc/friendly_id_datamapper.git'
 
 # REFINERY CMS DEVELOPMENT ====================================================
 

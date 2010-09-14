@@ -1,5 +1,5 @@
 require 'refinery'
-require 'authlogic'
+require 'dm-devise'
 
 module Refinery
   module Authentication

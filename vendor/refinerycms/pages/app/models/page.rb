@@ -28,8 +28,8 @@ class Page
 
 
   # Docs for friendly_id http://github.com/norman/friendly_id
-  # has_friendly_id :title, :use_slug => true,
-  #                :reserved_words => %w(index new session login logout users refinery admin images wymiframe)
+  has_friendly_id :title, :use_slug => true,
+                  :reserved_words => %w(index new session login logout users refinery admin images wymiframe)
 
   has n, :parts, :model => 'PagePart' #:order => "position ASC", :inverse_of => :page
   # FIXME: for DataMapper port

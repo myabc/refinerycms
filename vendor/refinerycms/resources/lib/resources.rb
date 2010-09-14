@@ -11,14 +11,16 @@ module Refinery
         app_resources.configure_with(:rails) do |c|
           c.datastore.root_path = Rails.root.join('public', 'system', 'resources').to_s
           c.url_path_prefix = '/system/resources'
-          if RefinerySetting.table_exists?
-            c.secret = RefinerySetting.find_or_set(:dragonfly_secret,
-                                                   Array.new(24) { rand(256) }.pack('C*').unpack('H*').first)
-          end
+          # FIXME for DataMapper
+          #if RefinerySetting.table_exists?
+          #  c.secret = RefinerySetting.find_or_set(:dragonfly_secret,
+          #                                         Array.new(24) { rand(256) }.pack('C*').unpack('H*').first)
+          #end
         end
         app_resources.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
-        app_resources.define_macro(ActiveRecord::Base, :resource_accessor)
+        # FIXME for DataMapper
+        #app_resources.define_macro(ActiveRecord::Base, :resource_accessor)
         app_resources.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
 
         # This little eval makes it so that dragonfly urls work in traditional

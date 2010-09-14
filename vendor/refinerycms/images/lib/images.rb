@@ -11,14 +11,14 @@ module Refinery
         app_images.configure_with(:rails) do |c|
           c.datastore.root_path = Rails.root.join('public', 'system', 'images').to_s
           c.url_path_prefix = '/system/images'
-          if RefinerySetting.table_exists?
-            c.secret = RefinerySetting.find_or_set(:dragonfly_secret,
-                                                   Array.new(24) { rand(256) }.pack('C*').unpack('H*').first)
-          end
+          # FIXME for DataMapper
+          # c.secret = RefinerySetting.find_or_set(:dragonfly_secret,
+          #                                       Array.new(24) { rand(256) }.pack('C*').unpack('H*').first)
         end
         app_images.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
-        app_images.define_macro(ActiveRecord::Base, :image_accessor)
+        # FIXME for DataMapper
+        # app_images.define_macro(ActiveRecord::Base, :image_accessor)
         app_images.analyser.register(Dragonfly::Analysis::RMagickAnalyser)
         app_images.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
 

@@ -58,7 +58,7 @@ class User
 
   has n, :roles, :through => Resource
   has n, :plugins, 'UserPlugin', :order => [:position.asc]
-  # has_friendly_id :login, :use_slug => false
+  has_friendly_id :login, :use_slug => false
 
   def plugins=(plugin_names)
     unless self.new_record? # don't add plugins when the user_id is NULL.

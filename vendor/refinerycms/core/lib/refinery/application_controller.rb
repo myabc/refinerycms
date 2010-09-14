@@ -27,7 +27,7 @@ module Refinery::ApplicationController
       c.send :after_filter, :store_current_location!,
                             :if => Proc.new {|c| c.send(:refinery_user?) rescue false }
 
-      c.send :rescue_from, ActiveRecord::RecordNotFound,
+      c.send :rescue_from, DataMapper::ObjectNotFoundError,
                            ActionController::UnknownAction,
                            ActionView::MissingTemplate,
                            :with => :error_404

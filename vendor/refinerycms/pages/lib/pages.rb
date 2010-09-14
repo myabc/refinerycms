@@ -1,5 +1,5 @@
 require 'refinery'
-require 'awesome_nested_set'
+require 'dm-is-tree'
 
 module Refinery
   module Pages
@@ -7,7 +7,7 @@ module Refinery
 
       # Register cache sweeper, ensuring that we don't overwrite any other observers.
       config.autoload_paths += %W(#{config.root}/app/sweepers)
-      (config.active_record.observers ||= []) << :page_sweeper
+      # FIXME for DataMapper: (config.active_record.observers ||= []) << :page_sweeper
 
       config.after_initialize do
         Refinery::Plugin.register do |plugin|

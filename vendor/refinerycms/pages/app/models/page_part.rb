@@ -3,7 +3,7 @@ class PagePart
 
   property :id,         Serial
   property :page_id,    Integer
-  property :title,      String
+  property :title,      String, :required => true
   property :body,       Text
   property :position,   Integer
   property :created_at, DateTime
@@ -11,8 +11,7 @@ class PagePart
 
   belongs_to :page, :model => 'Page'
 
-  validates :title, :presence => true
-  alias_attribute :content, :body
+  alias_method :content, :body
 
   def to_param
     "page_part_#{self.title.downcase.gsub(/\W/, '_')}"

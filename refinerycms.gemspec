@@ -13,16 +13,28 @@ Gem::Specification.new do |s|
   s.require_paths     = %w(lib vendor/refinerycms)
   s.executables       = %w(refinerycms)
 
-  s.add_dependency    'rails',                '~> 3.0.0'
+  s.add_dependency    'activesupport',        '~> 3.0.0'
+  s.add_dependency    'actionpack',           '~> 3.0.0'
+  s.add_dependency    'actionmailer',         '~> 3.0.0'
+  s.add_dependency    'railties',             '~> 3.0.0'
   s.add_dependency    'bundler',              '~> 1.0.0'
 
-  s.add_dependency    'moretea-awesome_nested_set', '= 1.4.3.1'
+  s.add_dependency    'dm-core',              '~> 1.0.2'
+  s.add_dependency    'dm-migrations',        '~> 1.0.2'
+  s.add_dependency    'dm-types',             '~> 1.0.2'
+  s.add_dependency    'dm-aggregates',        '~> 1.0.2'
+  s.add_dependency    'dm-timestamps',        '~> 1.0.2'
+  s.add_dependency    'dm-observer',          '~> 1.0.2'
+  s.add_dependency    'dm-ar-finders',        '~> 1.0.2'
+  s.add_dependency    'dm-serializer',        '~> 1.0.2'
+  s.add_dependency    'dm-is-tree',           '~> 1.0.0'
+  s.add_dependency    'dm-rails',             '~> 1.0.3'
 
-  s.add_dependency    'acts_as_indexed',      '~> 0.6.6'
   s.add_dependency    'friendly_id',          '~> 3.1.6'
+  s.add_dependency    'friendly_id_datamapper','~> 3.1.0.beta1'
   s.add_dependency    'truncate_html',        '= 0.4'
   s.add_dependency    'will_paginate',        '~> 3.0.pre'
-  s.add_dependency    'authlogic',            '~> 2.1.6'
+  s.add_dependency    'dm-devise',            '~> 1.1.0'
   s.add_dependency    'rack-cache',           '~> 0.5.2'
   s.add_dependency    'dragonfly',            '~> 0.7.5'
 
