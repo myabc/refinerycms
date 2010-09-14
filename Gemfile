@@ -52,7 +52,7 @@ gem 'refinerycms',              :path => '.'
 # gem 'refinerycms-theming',    '~> 0.9.8'
 
 # Add i18n support (optional, you can remove this if you really want to).
-gem 'refinerycms-i18n',         '~> 0.9.8.6', :require => 'refinery/i18n'
+# gem 'refinerycms-i18n',         '~> 0.9.8.6', :require => 'refinery/i18n'
 
 # Specify a version of RMagick that works in your environment:
 gem 'rmagick',                  '~> 2.12.0', :require => false
