@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
 
+=begin
   caches_action :home, :show,
                 :cache_path => Proc.new { |c| "#{Refinery.base_cache_key}/#{c.request.host_with_port}/views/pages/#{c.params[:path]}" },
                 :if => Proc.new { |c|
@@ -7,6 +8,7 @@ class PagesController < ApplicationController
                   (!RefinerySetting.table_exists? ||
                     RefinerySetting.find_or_set(:page_caching_enabled, true, :scoping => 'pages'))
                 }
+=end
 
   def home
     @page = Page.first(:link_url => "/")
