@@ -2,9 +2,9 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms}
-  s.version           = %q{0.9.8.1}
+  s.version           = %q{0.9.8.2}
   s.description       = %q{A Ruby on Rails CMS that supports Rails 3. It's easy to extend and sticks to 'the Rails way' where possible.}
-  s.date              = %q{2010-09-10}
+  s.date              = %q{2010-09-14}
   s.summary           = %q{A Ruby on Rails CMS that supports Rails 3}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
@@ -100,6 +100,7 @@ Gem::Specification.new do |s|
     'db/migrate/20100729221735_remove_page_translations_if_present.rb',
     'db/migrate/20100826232810_move_inquiry_settings_to_refinery_settings.rb',
     'db/migrate/20100831122919_move_page_to_nested_set.rb',
+    'db/migrate/20100913234704_add_cached_slug_to_pages.rb',
     'db/schema.rb',
     'db/seeds',
     'db/seeds.rb',
@@ -863,8 +864,6 @@ Gem::Specification.new do |s|
     'vendor/refinerycms/images/features/uploads/refinery_is_awesome.txt',
     'vendor/refinerycms/images/lib',
     'vendor/refinerycms/images/lib/images.rb',
-    'vendor/refinerycms/images/lib/tasks',
-    'vendor/refinerycms/images/lib/tasks/images.rake',
     'vendor/refinerycms/images/readme.md',
     'vendor/refinerycms/pages',
     'vendor/refinerycms/pages/app',

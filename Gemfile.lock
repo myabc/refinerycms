@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    refinerycms (0.9.8.1)
+    refinerycms (0.9.8.2)
       actionmailer (~> 3.0.0)
       actionpack (~> 3.0.0)
       activesupport (~> 3.0.0)

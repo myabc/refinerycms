@@ -37,7 +37,8 @@ class Page
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   # FIXME: for DataMapper port
-  #acts_as_indexed :fields => [:title, :meta_keywords, :meta_description, :custom_title, :browser_title, :all_page_part_content]
+  # acts_as_indexed :fields => [:title, :meta_keywords, :meta_description,
+  #                             :custom_title, :browser_title, :all_page_part_content]
 
   before :destroy, :deletable?
   after :save, :reposition_parts!
