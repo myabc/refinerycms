@@ -17,12 +17,9 @@ class RefinerySetting
   # FIXME: DM Porting
   # serialize :callback_proc_as_string
 
-  # FIXME: DM Porting
-  # before_save do |setting|
-  #  setting.restricted = false if setting.restricted.nil?
-  # end
-
-  before :save, :check_restriction
+  before :save do
+    self.restricted = false if self.restricted.nil?
+  end
 
   after :save do
     #if self.class.column_names.include?('scoping')
@@ -118,7 +115,7 @@ class RefinerySetting
 
     def set(name, value)
       scoping = (value.is_a?(Hash) and value.has_key?(:scoping)) ? value[:scoping] : nil
-      setting = find_or_initialize_by_name_and_scoping(:name => name.to_s, :scoping => scoping)
+      setting = self.first_or_new(:name => name.to_s, :scoping => scoping)
 
       # you could also pass in {:value => 'something', :scoping => 'somewhere'}
       unless value.is_a?(Hash) and value.has_key?(:value)

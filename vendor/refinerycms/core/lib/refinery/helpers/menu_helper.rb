@@ -15,7 +15,7 @@ module Refinery
       # Determines whether any page underneath the supplied page is the current page according to rails.
       # Just calls selected_page? for each descendant of the supplied page.
       def descendant_page_selected?(page)
-        page.has_descendants? and page.descendants.any? {|descendant| selected_page?(descendant) }
+        !page.descendants.empty? and page.descendants.any? {|descendant| selected_page?(descendant) }
       end
 
       # Determine whether the supplied page is the currently open page according to Refinery.

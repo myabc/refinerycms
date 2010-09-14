@@ -21,8 +21,8 @@ module Refinery::ApplicationController
       c.send :include, Crud # basic create, read, update and delete methods
       c.send :include, AuthenticatedSystem
 
-      c.send :before_filter, :find_pages_for_menu,
-                             :show_welcome_page?
+      c.send :before_filter, :find_pages_for_menu#,
+                             #:show_welcome_page?
 
       c.send :after_filter, :store_current_location!,
                             :if => Proc.new {|c| c.send(:refinery_user?) rescue false }
@@ -40,7 +40,7 @@ module Refinery::ApplicationController
     end
 
     def error_404(exception=nil)
-      if (@page = Page.where(:menu_match => "^/404$").includes(:parts, :slugs).first).present?
+      if (@page = Page.first(:menu_match => "^/404$")).present?
         # render the application's custom 404 page with layout and meta.
         render :template => "/pages/show",
                :format => 'html',
@@ -79,7 +79,7 @@ module Refinery::ApplicationController
 
     # get all the pages to be displayed in the site menu.
     def find_pages_for_menu
-      @menu_pages = Page.where(:show_in_menu => true, :draft => false).order('lft ASC').includes(:parts)
+      @menu_pages = Page.all(:show_in_menu => true, :draft => false, :order => [:lft.asc])
     end
 
     # use a different model for the meta information.
@@ -95,7 +95,7 @@ module Refinery::ApplicationController
     end
 
     def show_welcome_page?
-      render :template => "/welcome", :layout => "login" if just_installed? and controller_name != "users"
+      render :template => "/welcome", :layout => "login" if just_installed? and controller_name != "registrations"
     end
 
   private

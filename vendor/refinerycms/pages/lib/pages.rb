@@ -1,5 +1,7 @@
 require 'refinery'
-require 'dm-is-tree'
+require 'dm-accepts_nested_attributes'
+require 'dm-is-nested_set'
+require 'dm-observer'
 
 module Refinery
   module Pages

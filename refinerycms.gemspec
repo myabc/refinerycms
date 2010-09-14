@@ -27,7 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency    'dm-observer',          '~> 1.0.2'
   s.add_dependency    'dm-ar-finders',        '~> 1.0.2'
   s.add_dependency    'dm-serializer',        '~> 1.0.2'
-  s.add_dependency    'dm-is-tree',           '~> 1.0.0'
+  s.add_dependency    'dm-is-nested_set',     '~> 1.0.0'
+  s.add_dependency    'dm-accepts_nested_attributes'
   s.add_dependency    'dm-rails',             '~> 1.0.3'
 
   s.add_dependency    'friendly_id',          '~> 3.1.6'

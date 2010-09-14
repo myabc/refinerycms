@@ -16,14 +16,15 @@ class Refinery::AdminBaseController < ApplicationController
   end
 
   def error_404(exception=nil)
-    if (@page = Page.find_by_menu_match("^/404$", :include => [:parts, :slugs])).present?
+    if (@page = Page.first(:menu_match => "^/404$")).present?
       params[:action] = 'error_404'
       # change any links in the copy to the admin_root_url
       # and any references to "home page" to "Dashboard"
       part_symbol = Page.default_parts.first.to_sym
-      @page[part_symbol] = @page[part_symbol].gsub(
-                            /href=(\'|\")\/(\'|\")/, "href='#{admin_root_url(:only_path => true)}'"
-                           ).gsub("home page", "Dashboard")
+      # FIXME: DataMapper
+      #@page.get_part(part_symbol) = @page.get_part(part_symbol).gsub(
+      #                      /href=(\'|\")\/(\'|\")/, "href='#{admin_root_url(:only_path => true)}'"
+      #                     ).gsub("home page", "Dashboard")
 
       render :template => "/pages/show", :status => 404, :layout => layout?
     else

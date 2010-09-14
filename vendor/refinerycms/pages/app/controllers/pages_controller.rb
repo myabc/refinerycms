@@ -25,9 +25,9 @@ class PagesController < ApplicationController
   #
   def show
     @page = if params[:path]
-      Page.find(params[:path].split('/').last, :include => [:parts, :slugs])
+      Page.get(params[:path].split('/').last)
     else
-      Page.find(params[:id], :include => [:parts, :slugs])
+      Page.get(params[:id])
     end
 
     if @page.try(:live?) or
@@ -35,7 +35,7 @@ class PagesController < ApplicationController
         current_user.authorized_plugins.include?("refinery_pages"))
       # if the admin wants this to be a "placeholder" page which goes to its first child, go to that instead.
       if @page.skip_to_first_child
-        first_live_child = @page.children.find_by_draft(false, :order => "position ASC")
+        first_live_child = @page.children(:draft => false, :order => [:position.asc])
         redirect_to first_live_child.url if first_live_child.present?
       end
     else

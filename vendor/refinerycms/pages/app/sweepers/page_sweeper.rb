@@ -1,4 +1,6 @@
 class PageSweeper < ActionController::Caching::Sweeper
+  include DataMapper::Observer
+
   observe Page
 
   def after_save(page)

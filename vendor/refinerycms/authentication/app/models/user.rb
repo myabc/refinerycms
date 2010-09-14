@@ -15,8 +15,6 @@ class User
   property :crypted_password, String,   :length => 40
   property :password_salt,    String,   :length => 40
   property :persistence_token,String
-  property :created_at,       DateTime
-  property :updated_at,       DateTime
   property :perishable_token, String
 
   # Virtual attribute for the unencrypted password
@@ -33,13 +31,10 @@ class User
   before :save, :encrypt_password
 
 =end
-  has n, :plugins, :model => "UserPlugin", :order => [:position.asc]
+  property :created_at,       DateTime
+  property :updated_at,       DateTime
 
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
-  # attr_accessible :login, :email, :password, :password_confirmation, :plugins, :reset_code
-  # TODO: DM Porting - use :writer => protected (but revisit this)
-
+  timestamps :at
 
   #-------------------------------------------------------------------------------------------------
   # Authentication
@@ -88,7 +83,7 @@ class User
 
   def has_role?(title)
     raise ArgumentException, "Role should be the title of the role not a role object." if title.is_a?(Role)
-    (role = Role.find_by_title(title.to_s.camelize)).present? and self.roles.collect{|r| r.id}.include?(role.id)
+    (role = Role.first(:title => title.to_s.camelize)).present? and self.roles.collect{|r| r.id}.include?(role.id)
   end
 
 end

@@ -1,5 +1,3 @@
-require 'page_part'
-
 class Page
   include DataMapper::Resource
 
@@ -24,16 +22,16 @@ class Page
 
   validates_presence_of :title
 
-  is :tree, :order => :position.asc
+  is :nested_set, :order => :position.asc
 
 
   # Docs for friendly_id http://github.com/norman/friendly_id
   has_friendly_id :title, :use_slug => true,
                   :reserved_words => %w(index new session login logout users refinery admin images wymiframe)
 
-  has n, :parts, :model => 'PagePart' #:order => "position ASC", :inverse_of => :page
-  # FIXME: for DataMapper port
-  # accepts_nested_attributes_for :parts, :allow_destroy => true
+  has n, :parts, :model => 'PagePart', :order => [:position.asc]
+
+  accepts_nested_attributes_for :parts, :allow_destroy => true
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   # FIXME: for DataMapper port
@@ -222,20 +220,16 @@ class Page
   #    Page.first[:body]
   #
   # Will return the body page part of the first page.
-  def [](part_title)
+  def get_part(part_title)
     # don't want to override a super method when trying to call a page part.
     # the way that we call page parts seems flawed, will probably revert to page.parts[:title] in a future release.
-    if (super_value = super).blank?
       # self.parts is already eager loaded so we can now just grab the first element matching the title we specified.
-      part = self.parts.detect do |part|
-        part.title == part_title.to_s or
-        part.title.downcase.gsub(" ", "_") == part_title.to_s.downcase.gsub(" ", "_")
-      end
-
-      return part.body unless part.nil?
+    part = self.parts.detect do |part|
+      part.title == part_title.to_s or
+      part.title.downcase.gsub(" ", "_") == part_title.to_s.downcase.gsub(" ", "_")
     end
 
-    super_value
+    part.body unless part.nil?
   end
 
   # In the admin area we use a slightly different title to inform the which pages are draft or hidden pages

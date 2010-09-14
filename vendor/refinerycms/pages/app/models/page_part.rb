@@ -9,7 +9,7 @@ class PagePart
   property :created_at, DateTime
   property :updated_at, DateTime
 
-  belongs_to :page, :model => 'Page'
+  belongs_to :page
 
   alias_method :content, :body
 
