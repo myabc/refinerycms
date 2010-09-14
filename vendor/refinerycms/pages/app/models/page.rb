@@ -62,8 +62,15 @@ class Page
   # This ensures that they are in the correct 0,1,2,3,4... etc order.
   def reposition_parts!
     self.parts.each_with_index do |part, index|
-      part.update_attribute(:position, index)
+      part.attributes(:position => index)
     end
+  end
+
+  # FIXME Upstream: Workaround for DataMapper + accepts_nested_attributes_for
+  def update(attributes)
+    self.attributes(attributes)
+    self.parts_attributes = attributes[:parts_attributes]
+    save
   end
 
   # Before destroying a page we check to see if it's a deletable page or not

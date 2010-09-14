@@ -2,7 +2,7 @@ class Admin::RefinerySettingsController < Admin::BaseController
 
   crudify :refinery_setting,
           :title_attribute => :title,
-          :order => "name ASC",
+          :order => [:name.asc],
           :searchable => false,
           :redirect_to_url => :redirect_to_where?
 
@@ -10,23 +10,24 @@ class Admin::RefinerySettingsController < Admin::BaseController
   after_filter :fire_setting_callback, :only => [:update]
 
   def edit
-    @refinery_setting = RefinerySetting.find(params[:id])
+    @refinery_setting = RefinerySetting.get(params[:id])
 
     render :layout => false if request.xhr?
   end
 
   def find_all_refinery_settings
-    @refinery_settings = RefinerySetting.find(:all,
+    @refinery_settings = RefinerySetting.all(
     {
-      :order => "name ASC",
+      :order => [:name.asc],
       :conditions => (["restricted <> ?", true] unless current_user.has_role?(:superuser))
     })
   end
 
   def paginate_all_refinery_settings
-    @refinery_settings = RefinerySetting.paginate({
+    @refinery_settings ||= RefinerySetting.all
+    @refinery_settings = @refinery_settings.paginate({
       :page => params[:page],
-      :order => "name ASC",
+      :order => [:name.asc],
       :conditions => (["restricted <> ?", true] unless current_user.has_role?(:superuser))
     })
   end

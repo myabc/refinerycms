@@ -56,8 +56,8 @@ class User
   has_friendly_id :login, :use_slug => false
 
   def plugins=(plugin_names)
-    unless self.new_record? # don't add plugins when the user_id is NULL.
-      self.plugins.delete_all
+    unless self.new? # don't add plugins when the user_id is NULL.
+      self.plugins.all.destroy
 
       plugin_names.each_with_index do |plugin_name, index|
         self.plugins.create(:name => plugin_name, :position => index) if plugin_name.is_a?(String)

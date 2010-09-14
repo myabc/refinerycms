@@ -4,6 +4,7 @@ require 'action_mailer/railtie'
 require 'dm-rails/railtie'
 
 require 'dm-core'
+require 'dm-aggregates'
 require 'dm-types'
 require 'dm-devise'
 require 'dragonfly'

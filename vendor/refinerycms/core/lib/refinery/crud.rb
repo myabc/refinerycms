@@ -25,11 +25,10 @@ module Refinery
 
         options = {
           :title_attribute => "title",
-          :order => 'position ASC',
-          :conditions => '',
+          :order => [:position.asc],
+          :conditions => {},
           :sortable => true,
           :searchable => true,
-          :include => [],
           :paging => true,
           :search_conditions => '',
           :redirect_to_url => "admin_#{plural_name}_url"
@@ -45,10 +44,10 @@ module Refinery
 
           def create
             # if the position field exists, set this object as last object, given the conditions of this class.
-            if #{class_name}.column_names.include?("position")
-              params[:#{singular_name}].merge!({
-                :position => ((#{class_name}.maximum(:position, :conditions => #{options[:conditions].inspect})||-1) + 1)
-              })
+            if #{class_name}.properties[:position]
+            #  params[:#{singular_name}].merge!({
+            #    :position => ((#{class_name}.max(:position, :conditions => #{options[:conditions].inspect})|| {}) + 1)
+            #  })
             end
 
             if (@#{singular_name} = #{class_name}.create(params[:#{singular_name}])).valid?
@@ -88,7 +87,7 @@ module Refinery
           end
 
           def update
-            if @#{singular_name}.update_attributes(params[:#{singular_name}])
+            if @#{singular_name}.update(params[:#{singular_name}])
               (request.xhr? ? flash.now : flash).notice = t(
                 'refinery.crudify.updated',
                 :what => "'\#{@#{singular_name}.#{options[:title_attribute]}}'"
@@ -131,17 +130,13 @@ module Refinery
 
           # Finds one single result based on the id params.
           def find_#{singular_name}
-            @#{singular_name} = #{class_name}.find(params[:id],
-                                                   :include => #{options[:include].map(&:to_sym).inspect})
+            @#{singular_name} = #{class_name}.get(params[:id])
           end
 
           # Find the collection of @#{plural_name} based on the conditions specified into crudify
           # It will be ordered based on the conditions specified into crudify
-          # And eager loading is applied as specified into crudify.
           def find_all_#{plural_name}(conditions = #{options[:conditions].inspect})
-            @#{plural_name} = #{class_name}.where(conditions).includes(
-                                #{options[:include].map(&:to_sym).inspect}
-                              ).order("#{options[:order]}")
+            @#{plural_name} = #{class_name}.all(conditions)
           end
 
           # Paginate a set of @#{plural_name} that may/may not already exist.
@@ -220,10 +215,10 @@ module Refinery
               while (index ||= 0) < (newlist ||= params[:ul]).length do
                 hash = newlist[index.to_s]
                 moved_item_id = hash['id'].split(/#{singular_name}/)
-                @current_#{singular_name} = #{class_name}.find_by_id(moved_item_id)
+                @current_#{singular_name} = #{class_name}.first(:id => moved_item_id)
 
                 if previous.present?
-                  @previous_item = #{class_name}.find_by_id(previous)
+                  @previous_item = #{class_name}.first(:id => previous)
                   @current_#{singular_name}.move_to_right_of(@previous_item)
                 else
                    @current_#{singular_name}.move_to_root
@@ -245,7 +240,7 @@ module Refinery
               while child_index < node['children'].length do
                 child = node['children'][child_index.to_s]
                 child_id = child['id'].split(/#{singular_name}/)
-                child_#{singular_name} = #{class_name}.find_by_id(child_id)
+                child_#{singular_name} = #{class_name}.first(:id => child_id)
                 child_#{singular_name}.move_to_child_of(#{singular_name})
 
                 if child['children'].present?

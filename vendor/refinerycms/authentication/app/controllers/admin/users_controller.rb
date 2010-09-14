@@ -1,6 +1,6 @@
 class Admin::UsersController < Admin::BaseController
 
-  crudify :user, :order => 'login', :title_attribute => 'login'
+  crudify :user, :order => [:login], :title_attribute => 'login'
 
   # Protect these actions behind an admin login
   before_filter :find_user, :except => [:index, :new, :create]
@@ -27,7 +27,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def edit
-    @user = User.find params[:id]
+    @user = User.get(params[:id])
     @selected_plugin_names = @user.plugins.collect{|p| p.name}
   end
 
